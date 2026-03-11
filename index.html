@@ -4,137 +4,257 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Petty Cash TAJ</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#0d0d0d;--s1:#161616;--s2:#1e1e1e;--bd:#2a2a2a;--ac:#c8f55a;--re:#ff5c5c;--gr:#3fb950;--tx:#f0f0f0;--mu:#666;}
+:root{
+  --bg:#080b0f;
+  --s1:#0f1318;
+  --s2:#161c23;
+  --s3:#1d252f;
+  --bd:#242d38;
+  --bd2:#2e3a47;
+  --ac:#b8f060;
+  --ac2:#8fd43a;
+  --re:#ff6b6b;
+  --gr:#4ade80;
+  --tx:#e8edf2;
+  --mu:#5a6a7a;
+  --mu2:#7a8a9a;
+  --gold:#f0c060;
+}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--tx);font-family:sans-serif;min-height:100vh;}
-#lw{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;}
-.lb{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:44px 40px;width:100%;max-width:380px;text-align:center;}
-.ll{font-size:1.8rem;font-weight:900;margin-bottom:6px;font-family:Georgia,serif;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;}
+
+/* ── Noise texture overlay ── */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4;}
+
+/* ── Login ── */
+#lw{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;}
+.lb{background:var(--s1);border:1px solid var(--bd);border-radius:20px;padding:48px 44px;width:100%;max-width:400px;text-align:center;position:relative;overflow:hidden;}
+.lb::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(184,240,96,.12),transparent 70%);pointer-events:none;}
+.lb::after{content:'';position:absolute;bottom:-40px;left:-40px;width:150px;height:150px;background:radial-gradient(circle,rgba(74,222,128,.08),transparent 70%);pointer-events:none;}
+.ll{font-size:2rem;font-weight:400;margin-bottom:4px;font-family:'DM Serif Display',serif;letter-spacing:-.5px;}
 .ll span{color:var(--ac);}
-.ls{font-size:.8rem;color:var(--mu);margin-bottom:28px;}
-.lf{margin-bottom:14px;text-align:left;}
-.lf label{font-size:.7rem;color:var(--mu);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;display:block;}
-.lf input{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:7px;color:var(--tx);font-size:.95rem;padding:11px 14px;outline:none;}
+.ls{font-size:.78rem;color:var(--mu);margin-bottom:32px;letter-spacing:.5px;text-transform:uppercase;}
+.lf{margin-bottom:16px;text-align:left;}
+.lf label{font-size:.65rem;color:var(--mu2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;display:block;}
+.lf input{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:10px;color:var(--tx);font-size:.92rem;padding:12px 16px;outline:none;font-family:'DM Sans',sans-serif;transition:border-color .2s;}
 .lf input:focus{border-color:var(--ac);}
-.lbtn{width:100%;background:var(--ac);color:#000;border:none;border-radius:7px;padding:12px;font-size:.95rem;font-weight:700;cursor:pointer;margin-top:8px;}
-.lerr{color:var(--re);font-size:.82rem;margin-top:10px;min-height:18px;}
-header{background:var(--s1);border-bottom:1px solid var(--bd);padding:14px 22px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:8px;}
-.logo{font-size:1.3rem;font-weight:900;font-family:Georgia,serif;}
+.lbtn{width:100%;background:var(--ac);color:#000;border:none;border-radius:10px;padding:13px;font-size:.92rem;font-weight:700;cursor:pointer;margin-top:10px;font-family:'DM Sans',sans-serif;letter-spacing:.3px;transition:background .2s,transform .1s;}
+.lbtn:hover{background:var(--ac2);}
+.lbtn:active{transform:scale(.98);}
+.lerr{color:var(--re);font-size:.8rem;margin-top:10px;min-height:18px;}
+
+/* ── Sync bar ── */
+#sync-bar{background:linear-gradient(90deg,#0a1a0a,#0f2010,#0a1a0a);border-bottom:1px solid rgba(184,240,96,.2);padding:7px 22px;font-size:.7rem;color:var(--ac);display:none;align-items:center;gap:8px;letter-spacing:.3px;}
+#sync-bar.show{display:flex;}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--ac);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.8);}}
+
+/* ── Header ── */
+header{background:rgba(8,11,15,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--bd);padding:0 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;height:58px;}
+.logo{font-size:1.2rem;font-weight:400;font-family:'DM Serif Display',serif;letter-spacing:-.3px;display:flex;align-items:center;gap:10px;}
+.logo-dot{width:8px;height:8px;border-radius:50%;background:var(--ac);display:inline-block;}
 .logo span{color:var(--ac);}
-.tabs{display:flex;gap:3px;background:var(--s2);padding:4px;border-radius:8px;flex-wrap:wrap;}
-.tab{padding:6px 12px;border-radius:6px;border:none;background:transparent;color:var(--mu);font-size:.78rem;font-weight:500;cursor:pointer;white-space:nowrap;}
+.tabs{display:flex;gap:2px;background:var(--s2);padding:4px;border-radius:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{padding:6px 14px;border-radius:7px;border:none;background:transparent;color:var(--mu2);font-size:.72rem;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;letter-spacing:.3px;text-transform:uppercase;transition:all .2s;}
 .tab.active{background:var(--ac);color:#000;}
-.main{padding:20px 22px;max-width:1200px;margin:0 auto;}
-.card{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:20px;margin-bottom:20px;}
-.ctitle{font-size:1rem;margin-bottom:14px;color:var(--ac);font-family:Georgia,serif;}
+.tab:hover:not(.active){color:var(--tx);background:var(--s3);}
+
+/* ── Main ── */
+.main{padding:20px 20px;max-width:1280px;margin:0 auto;}
+
+/* ── Cards ── */
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:22px;margin-bottom:18px;position:relative;overflow:hidden;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(184,240,96,.3),transparent);}
+.ctitle{font-size:.92rem;margin-bottom:16px;color:var(--ac);font-family:'DM Serif Display',serif;letter-spacing:.3px;display:flex;align-items:center;gap:8px;}
 .ctitle.g{color:var(--gr);}
-.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:14px;}
-label{display:block;font-size:.68rem;color:var(--mu);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
-input,select{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:7px;color:var(--tx);font-size:.86rem;padding:8px 11px;outline:none;}
-input:focus,select:focus{border-color:var(--ac);}
-input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.6);}
-select option{background:#1e1e1e;}
-.bny{background:var(--ac);color:#000;border:none;border-radius:7px;padding:9px 20px;font-size:.86rem;font-weight:700;cursor:pointer;}
-.bng{background:var(--gr);color:#000;border:none;border-radius:7px;padding:9px 20px;font-size:.86rem;font-weight:700;cursor:pointer;}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px;margin-bottom:18px;}
-.sc{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:14px 16px;}
-.scl{font-size:.61rem;color:var(--mu);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
-.scv{font-size:.98rem;font-weight:600;}
-.scs{font-size:.66rem;color:var(--mu);margin-top:3px;}
-.gp{color:var(--gr)!important;} .rp{color:var(--re)!important;}
-.toolbar{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap;}
-.toolbar input,.toolbar select{width:auto;font-size:.79rem;padding:6px 10px;}
-.cbn{margin-left:auto;background:var(--s2);border:1px solid var(--bd);border-radius:20px;padding:3px 10px;font-size:.69rem;color:var(--mu);}
-.tw{background:var(--s1);border:1px solid var(--bd);border-radius:10px;overflow:hidden;}
-table{width:100%;border-collapse:collapse;} thead{background:var(--s2);}
-th{text-align:left;padding:10px 13px;font-size:.61rem;text-transform:uppercase;letter-spacing:1px;color:var(--mu);border-bottom:1px solid var(--bd);cursor:pointer;white-space:nowrap;}
-td{padding:10px 13px;font-size:.83rem;border-bottom:1px solid #1a1a1a;vertical-align:middle;}
-tr:last-child td{border-bottom:none;} tr:hover td{background:rgba(255,255,255,.02);}
-.ae{color:var(--re);font-weight:600;} .ai{color:var(--gr);font-weight:600;}
-.dc{font-size:.76rem;color:var(--mu);}
-.bdg{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.68rem;font-weight:500;}
-.ba{background:rgba(200,245,90,.13);color:#c8f55a;border:1px solid rgba(200,245,90,.2);}
-.bu{background:rgba(99,179,237,.13);color:#63b3ed;border:1px solid rgba(99,179,237,.2);}
-.bh{background:rgba(245,200,66,.13);color:#f5c842;border:1px solid rgba(245,200,66,.2);}
-.by{background:rgba(237,137,54,.13);color:#ed8936;border:1px solid rgba(237,137,54,.2);}
-.bg{background:rgba(63,185,80,.13);color:#3fb950;border:1px solid rgba(63,185,80,.2);}
-.cb{background:var(--s2);border:1px solid var(--bd);color:var(--mu);padding:1px 6px;border-radius:4px;font-size:.65rem;}
-.te{color:var(--re);border:1px solid rgba(255,92,92,.3);padding:1px 7px;border-radius:20px;font-size:.66rem;}
-.ti{color:var(--gr);border:1px solid rgba(63,185,80,.3);padding:1px 7px;border-radius:20px;font-size:.66rem;}
-.ck{width:16px;height:16px;background:var(--s2);border:1.5px solid var(--bd);border-radius:4px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:#000;}
+.ctitle::before{content:'';width:3px;height:16px;border-radius:2px;background:currentColor;display:inline-block;}
+
+/* ── Form grid ── */
+.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px;}
+@media(max-width:600px){.fg{grid-template-columns:1fr 1fr;}}
+@media(max-width:400px){.fg{grid-template-columns:1fr;}}
+label{display:block;font-size:.62rem;color:var(--mu2);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:5px;font-weight:600;}
+input,select{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:9px;color:var(--tx);font-size:.84rem;padding:9px 12px;outline:none;font-family:'DM Sans',sans-serif;transition:border-color .2s,background .2s;}
+input:focus,select:focus{border-color:var(--ac);background:var(--s3);}
+input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.5);}
+select option{background:var(--s2);}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;}
+.bny{background:var(--ac);color:#000;border:none;border-radius:9px;padding:10px 22px;font-size:.84rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s,transform .1s;letter-spacing:.2px;}
+.bny:hover{background:var(--ac2);}
+.bny:active{transform:scale(.97);}
+.bng{background:var(--gr);color:#000;border:none;border-radius:9px;padding:10px 22px;font-size:.84rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s;letter-spacing:.2px;}
+.bng:hover{background:#3ecf70;}
+.btn-xl{background:var(--s2);color:var(--gr);border:1px solid rgba(74,222,128,.3);border-radius:9px;padding:10px 18px;font-size:.78rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;letter-spacing:.2px;}
+.btn-xl:hover{background:rgba(74,222,128,.1);border-color:var(--gr);}
+
+/* ── Stats ── */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:18px;}
+@media(max-width:500px){.stats{grid-template-columns:repeat(2,1fr);}}
+.sc{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;position:relative;overflow:hidden;transition:border-color .2s;}
+.sc:hover{border-color:var(--bd2);}
+.sc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(184,240,96,.15),transparent);}
+.scl{font-size:.58rem;color:var(--mu);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;font-weight:600;}
+.scv{font-size:.94rem;font-weight:700;line-height:1.2;}
+.scs{font-size:.62rem;color:var(--mu);margin-top:4px;}
+.gp{color:var(--gr)!important;}
+.rp{color:var(--re)!important;}
+.ap{color:var(--ac)!important;}
+
+/* ── Toolbar ── */
+.toolbar{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap;}
+.toolbar input,.toolbar select{width:auto;font-size:.76rem;padding:7px 10px;}
+.cbn{margin-left:auto;background:var(--s2);border:1px solid var(--bd);border-radius:20px;padding:3px 12px;font-size:.66rem;color:var(--mu2);font-weight:600;}
+@media(max-width:500px){.toolbar{gap:6px;}.toolbar input{width:100px!important;}}
+
+/* ── Table wrapper ── */
+.tw{background:var(--s1);border:1px solid var(--bd);border-radius:14px;overflow:hidden;}
+.tw-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+table{width:100%;border-collapse:collapse;min-width:600px;}
+thead{background:var(--s2);}
+th{text-align:left;padding:11px 14px;font-size:.58rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--mu);border-bottom:1px solid var(--bd);cursor:pointer;white-space:nowrap;font-weight:700;}
+th:hover{color:var(--mu2);}
+td{padding:11px 14px;font-size:.81rem;border-bottom:1px solid rgba(36,45,56,.8);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(255,255,255,.018);}
+.ae{color:var(--re);font-weight:600;}
+.ai{color:var(--gr);font-weight:600;}
+.dc{font-size:.72rem;color:var(--mu2);}
+.bdg{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.65rem;font-weight:600;letter-spacing:.3px;}
+.ba{background:rgba(184,240,96,.12);color:#b8f060;border:1px solid rgba(184,240,96,.25);}
+.bu{background:rgba(99,179,237,.12);color:#63b3ed;border:1px solid rgba(99,179,237,.25);}
+.bh{background:rgba(245,200,66,.12);color:#f5c842;border:1px solid rgba(245,200,66,.25);}
+.by{background:rgba(237,137,54,.12);color:#ed8936;border:1px solid rgba(237,137,54,.25);}
+.bg{background:rgba(74,222,128,.12);color:#4ade80;border:1px solid rgba(74,222,128,.25);}
+.cb{background:var(--s3);border:1px solid var(--bd);color:var(--mu2);padding:2px 7px;border-radius:5px;font-size:.62rem;font-weight:500;}
+.te{color:var(--re);border:1px solid rgba(255,107,107,.3);padding:2px 8px;border-radius:20px;font-size:.63rem;font-weight:600;}
+.ti{color:var(--gr);border:1px solid rgba(74,222,128,.3);padding:2px 8px;border-radius:20px;font-size:.63rem;font-weight:600;}
+.ck{width:17px;height:17px;background:var(--s2);border:1.5px solid var(--bd);border-radius:5px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:#000;transition:all .2s;}
 .ck.on{background:var(--ac);border-color:var(--ac);}
-.ibed{background:none;border:none;color:var(--mu);cursor:pointer;padding:3px 6px;border-radius:4px;font-size:.85rem;}
-.ibed:hover{color:var(--ac);}
-.ibde{background:none;border:none;color:var(--mu);cursor:pointer;padding:3px 6px;border-radius:4px;font-size:.85rem;}
-.ibde:hover{color:var(--re);}
-.pg{background:var(--s1);border:1px solid var(--bd);border-radius:10px;margin-bottom:12px;overflow:hidden;}
-.pgh{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--s2);border-bottom:1px solid var(--bd);}
-.pgr{display:flex;gap:12px;padding:8px 16px;border-bottom:1px solid #1a1a1a;font-size:.82rem;align-items:center;}
+.ibed{background:none;border:none;color:var(--mu);cursor:pointer;padding:4px 7px;border-radius:6px;font-size:.85rem;transition:all .2s;}
+.ibed:hover{color:var(--ac);background:rgba(184,240,96,.1);}
+.ibde{background:none;border:none;color:var(--mu);cursor:pointer;padding:4px 7px;border-radius:6px;font-size:.85rem;transition:all .2s;}
+.ibde:hover{color:var(--re);background:rgba(255,107,107,.1);}
+
+/* ── Totals ── */
+.pg{background:var(--s1);border:1px solid var(--bd);border-radius:12px;margin-bottom:12px;overflow:hidden;}
+.pgh{display:flex;align-items:center;justify-content:space-between;padding:13px 18px;background:var(--s2);border-bottom:1px solid var(--bd);}
+.pgr{display:flex;gap:12px;padding:9px 18px;border-bottom:1px solid rgba(36,45,56,.8);font-size:.8rem;align-items:center;}
 .pgr:last-child{border-bottom:none;}
-.pgrd{font-size:.7rem;color:var(--mu);min-width:66px;}
-.pgrdsc{flex:1;} .pgra{color:var(--re);min-width:90px;text-align:right;font-weight:600;}
-.ci{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--s2);border:1px solid var(--bd);border-radius:7px;margin-bottom:6px;}
-.cdl{background:none;border:none;color:var(--re);cursor:pointer;font-size:.77rem;padding:3px 8px;border-radius:4px;}
-.sflt{display:flex;gap:10px;align-items:center;margin-bottom:20px;flex-wrap:wrap;background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:14px 18px;}
-.sflt-lbl{font-size:.65rem;color:var(--mu);text-transform:uppercase;letter-spacing:1px;}
-.sflt input[type=date]{width:auto;padding:7px 12px;font-size:.82rem;}
-.sflt select{width:auto;padding:7px 10px;font-size:.82rem;}
+.pgrd{font-size:.68rem;color:var(--mu2);min-width:70px;}
+.pgrdsc{flex:1;}
+.pgra{color:var(--re);min-width:95px;text-align:right;font-weight:700;}
+
+/* ── Categories ── */
+.ci{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;background:var(--s2);border:1px solid var(--bd);border-radius:9px;margin-bottom:6px;transition:border-color .2s;}
+.ci:hover{border-color:var(--bd2);}
+.cdl{background:none;border:none;color:var(--re);cursor:pointer;font-size:.74rem;padding:3px 8px;border-radius:5px;transition:background .2s;}
+.cdl:hover{background:rgba(255,107,107,.1);}
+
+/* ── Statement ── */
+.sflt{display:flex;gap:10px;align-items:center;margin-bottom:20px;flex-wrap:wrap;background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:14px 18px;}
+.sflt-lbl{font-size:.62rem;color:var(--mu2);text-transform:uppercase;letter-spacing:1px;font-weight:600;}
+.sflt input[type=date]{width:auto;padding:7px 12px;font-size:.8rem;}
+.sflt select{width:auto;padding:7px 10px;font-size:.8rem;}
 .sflt-sep{flex:1;}
-.sflt-clr{background:none;border:1px solid var(--bd);color:var(--mu);border-radius:7px;padding:7px 14px;cursor:pointer;font-size:.78rem;}
+@media(max-width:600px){.sflt{gap:8px;}.sflt-sep{display:none;}}
+.sflt-clr{background:none;border:1px solid var(--bd);color:var(--mu2);border-radius:8px;padding:7px 14px;cursor:pointer;font-size:.76rem;font-family:'DM Sans',sans-serif;transition:all .2s;}
 .sflt-clr:hover{border-color:var(--ac);color:var(--ac);}
-.sflt-dl{background:var(--ac);color:#000;border:none;border-radius:7px;padding:7px 16px;cursor:pointer;font-size:.78rem;font-weight:700;}
-.stc{background:var(--s1);border:1px solid var(--bd);border-radius:14px;margin-bottom:24px;overflow:hidden;}
-.sth{padding:15px 20px;display:flex;align-items:center;justify-content:space-between;background:var(--s2);border-bottom:1px solid var(--bd);}
-.sth-left{display:flex;align-items:center;gap:11px;}
-.sth-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.78rem;flex-shrink:0;}
-.sth-name{font-size:.92rem;font-weight:700;}
-.sth-meta{font-size:.66rem;color:var(--mu);margin-top:2px;}
+.sflt-dl{background:var(--ac);color:#000;border:none;border-radius:8px;padding:7px 16px;cursor:pointer;font-size:.76rem;font-weight:700;font-family:'DM Sans',sans-serif;transition:background .2s;}
+.sflt-dl:hover{background:var(--ac2);}
+.sflt-xl{background:var(--s2);color:var(--gr);border:1px solid rgba(74,222,128,.3);border-radius:8px;padding:7px 16px;cursor:pointer;font-size:.76rem;font-weight:700;font-family:'DM Sans',sans-serif;transition:all .2s;}
+.sflt-xl:hover{background:rgba(74,222,128,.1);}
+
+/* ── Statement cards ── */
+.stc{background:var(--s1);border:1px solid var(--bd);border-radius:16px;margin-bottom:22px;overflow:hidden;}
+.sth{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;background:var(--s2);border-bottom:1px solid var(--bd);}
+.sth-left{display:flex;align-items:center;gap:12px;}
+.sth-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem;flex-shrink:0;}
+.sth-name{font-size:.9rem;font-weight:700;}
+.sth-meta{font-size:.64rem;color:var(--mu2);margin-top:2px;}
 .sth-bal{text-align:right;}
-.sth-bal-lbl{font-size:.58rem;color:var(--mu);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;}
-.sth-bal-val{font-size:.96rem;font-weight:700;}
+.sth-bal-lbl{font-size:.56rem;color:var(--mu);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;font-weight:600;}
+.sth-bal-val{font-size:.94rem;font-weight:700;}
 .stbl{width:100%;border-collapse:collapse;}
 .stbl thead tr{background:var(--s2);}
-.stbl th{padding:9px 16px;font-size:.6rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--mu);font-weight:600;border-bottom:1px solid var(--bd);white-space:nowrap;}
+.stbl th{padding:9px 16px;font-size:.58rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--mu);font-weight:700;border-bottom:1px solid var(--bd);white-space:nowrap;}
 .stbl th.r{text-align:right;}
-.stbl td{padding:10px 16px;font-size:.84rem;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle;}
+.stbl td{padding:10px 16px;font-size:.82rem;border-bottom:1px solid rgba(36,45,56,.6);vertical-align:middle;}
 .stbl td.r{text-align:right;font-weight:600;}
 .stbl tr:last-child td{border-bottom:none;}
-.stbl tr:hover td{background:rgba(255,255,255,.025);}
-.td-date{font-size:.7rem;color:var(--mu);white-space:nowrap;}
-.td-cat{font-size:.62rem;background:var(--s2);border:1px solid var(--bd);color:var(--mu);padding:1px 6px;border-radius:4px;text-transform:uppercase;}
-.td-inc{color:var(--gr)!important;} .td-exp{color:var(--re)!important;}
-.td-bal-pos{color:var(--gr)!important;} .td-bal-neg{color:var(--re)!important;}
-.stbl tr.fr-row td{border-top:2px solid var(--bd);font-weight:700;background:rgba(255,255,255,.02);}
-.mbg{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:8888;display:none;align-items:center;justify-content:center;}
+.stbl tr:hover td{background:rgba(255,255,255,.02);}
+.td-date{font-size:.68rem;color:var(--mu2);white-space:nowrap;}
+.td-cat{font-size:.6rem;background:var(--s3);border:1px solid var(--bd);color:var(--mu2);padding:2px 7px;border-radius:5px;text-transform:uppercase;font-weight:500;}
+.td-inc{color:var(--gr)!important;}
+.td-exp{color:var(--re)!important;}
+.td-bal-pos{color:var(--gr)!important;}
+.td-bal-neg{color:var(--re)!important;}
+.stbl tr.fr-row td{border-top:2px solid var(--bd);font-weight:700;background:rgba(255,255,255,.025);}
+
+/* ── Modal ── */
+.mbg{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);z-index:8888;display:none;align-items:center;justify-content:center;padding:20px;}
 .mbg.open{display:flex;}
-.mbox{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:24px;width:100%;max-width:340px;}
-.mttl{font-size:1rem;color:var(--ac);margin-bottom:14px;font-family:Georgia,serif;}
-.mf{margin-bottom:11px;}
-.mf label{font-size:.67rem;color:var(--mu);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;display:block;}
-.mf input{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:7px;color:var(--tx);font-size:.87rem;padding:8px 11px;outline:none;}
-.mbtns{display:flex;gap:8px;margin-top:14px;}
-.msav{flex:1;background:var(--ac);color:#000;border:none;border-radius:7px;padding:9px;font-size:.86rem;font-weight:700;cursor:pointer;}
-.mcan{flex:1;background:var(--s2);color:var(--tx);border:1px solid var(--bd);border-radius:7px;padding:9px;font-size:.86rem;cursor:pointer;}
-.toast{position:fixed;bottom:22px;right:22px;background:var(--ac);color:#000;padding:10px 17px;border-radius:8px;font-size:.81rem;font-weight:600;z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s;pointer-events:none;}
+.mbox{background:var(--s1);border:1px solid var(--bd);border-radius:18px;padding:28px;width:100%;max-width:360px;position:relative;}
+.mbox::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(184,240,96,.4),transparent);}
+.mttl{font-size:1rem;color:var(--ac);margin-bottom:16px;font-family:'DM Serif Display',serif;}
+.mf{margin-bottom:12px;}
+.mf label{font-size:.62rem;color:var(--mu2);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;display:block;font-weight:600;}
+.mf input{width:100%;background:var(--s2);border:1px solid var(--bd);border-radius:9px;color:var(--tx);font-size:.86rem;padding:9px 12px;outline:none;font-family:'DM Sans',sans-serif;}
+.mf input:focus{border-color:var(--ac);}
+.mbtns{display:flex;gap:8px;margin-top:16px;}
+.msav{flex:1;background:var(--ac);color:#000;border:none;border-radius:9px;padding:10px;font-size:.84rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.mcan{flex:1;background:var(--s2);color:var(--tx);border:1px solid var(--bd);border-radius:9px;padding:10px;font-size:.84rem;cursor:pointer;font-family:'DM Sans',sans-serif;}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--ac);color:#000;padding:11px 18px;border-radius:10px;font-size:.8rem;font-weight:700;z-index:9999;transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;font-family:'DM Sans',sans-serif;letter-spacing:.2px;}
 .toast.show{transform:translateY(0);opacity:1;}
+
+/* ── Mobile bottom nav ── */
+@media(max-width:640px){
+  header{padding:0 14px;height:52px;}
+  .logo{font-size:1rem;}
+  .tabs{display:none;}
+  .mob-nav{display:flex!important;}
+  .main{padding:14px 12px 80px;}
+  .card{padding:16px;}
+  .fg{gap:10px;}
+}
+.mob-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(15,19,24,.96);backdrop-filter:blur(20px);border-top:1px solid var(--bd);z-index:200;padding:8px 0 env(safe-area-inset-bottom,8px);}
+.mob-nav-inner{display:flex;justify-content:space-around;align-items:center;}
+.mnb{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 12px;border:none;background:none;color:var(--mu);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.58rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;border-radius:8px;transition:color .2s;}
+.mnb.active{color:var(--ac);}
+.mnb svg{width:20px;height:20px;}
+
+/* ── Divider ── */
+.section-divider{height:1px;background:linear-gradient(90deg,transparent,var(--bd),transparent);margin:4px 0 18px;}
 </style>
 </head>
 <body>
 
+<!-- Login -->
 <div id="lw">
   <div class="lb">
     <div class="ll">Petty Cash <span>TAJ</span></div>
-    <div class="ls">Secure Team Expense Tracker</div>
-    <div class="lf"><label>Username</label><input type="text" id="lu" placeholder="e.g. Admin"/></div>
-    <div class="lf"><label>Password</label><input type="password" id="lp" placeholder="Password"/></div>
-    <button class="lbtn" id="lbtn">Sign In</button>
+    <div class="ls">Team Expense Tracker</div>
+    <div class="lf"><label>Username</label><input type="text" id="lu" placeholder="e.g. Admin" autocomplete="username"/></div>
+    <div class="lf"><label>Password</label><input type="password" id="lp" placeholder="Password" autocomplete="current-password"/></div>
+    <button class="lbtn" id="lbtn">Sign In →</button>
     <div class="lerr" id="lerr"></div>
   </div>
 </div>
 
+<!-- Sync bar -->
+<div id="sync-bar">
+  <div class="sync-dot"></div>
+  <span>Live sync active — all team members share the same data in real time</span>
+</div>
+
+<!-- Header -->
 <header>
-  <div class="logo">Petty Cash <span>TAJ</span></div>
+  <div class="logo"><span class="logo-dot"></span>Petty Cash <span>TAJ</span></div>
   <div class="tabs">
     <button class="tab active" id="tab-all"  onclick="setTab('all')">All</button>
     <button class="tab"        id="tab-inc"  onclick="setTab('inc')">Income</button>
@@ -145,10 +265,37 @@ tr:last-child td{border-bottom:none;} tr:hover td{background:rgba(255,255,255,.0
   </div>
 </header>
 
+<!-- Mobile bottom nav -->
+<nav class="mob-nav">
+  <div class="mob-nav-inner">
+    <button class="mnb active" id="mnb-all" onclick="setTab('all')">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+      All
+    </button>
+    <button class="mnb" id="mnb-inc" onclick="setTab('inc')">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>
+      Income
+    </button>
+    <button class="mnb" id="mnb-todo" onclick="setTab('todo')">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+      To-Do
+    </button>
+    <button class="mnb" id="mnb-tot" onclick="setTab('tot')">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+      Totals
+    </button>
+    <button class="mnb" id="mnb-stmt" onclick="setTab('stmt')">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+      Report
+    </button>
+  </div>
+</nav>
+
 <div class="main">
 
+<!-- Expense form -->
 <div class="card" id="exp-form">
-  <div class="ctitle">+ Add Expense</div>
+  <div class="ctitle">Add Expense</div>
   <div class="fg">
     <div><label>Date</label><input type="date" id="ed"/></div>
     <div><label>Description (optional)</label><input type="text" id="edsc" placeholder="e.g. Food"/></div>
@@ -165,14 +312,17 @@ tr:last-child td{border-bottom:none;} tr:hover td{background:rgba(255,255,255,.0
         <option>Machine Maintenance - Oil</option><option>Other</option>
         <option value="NEW_EXP">+ Add new...</option>
       </select>
-      <input type="text" id="ecn" placeholder="New category" style="display:none;margin-top:6px"/>
+      <input type="text" id="ecn" placeholder="New category name" style="display:none;margin-top:7px"/>
     </div>
   </div>
-  <button class="bny" onclick="addExp()">Add Expense</button>
+  <div class="btn-row">
+    <button class="bny" onclick="addExp()">+ Add Expense</button>
+  </div>
 </div>
 
+<!-- Income form -->
 <div class="card" id="inc-form" style="display:none">
-  <div class="ctitle g">+ Add Income</div>
+  <div class="ctitle g">Add Income</div>
   <div class="fg">
     <div><label>Date</label><input type="date" id="ind"/></div>
     <div><label>Description (optional)</label><input type="text" id="indsc" placeholder="e.g. Sales"/></div>
@@ -189,44 +339,44 @@ tr:last-child td{border-bottom:none;} tr:hover td{background:rgba(255,255,255,.0
         <option>Cash Received</option>
         <option value="NEW_INC">+ Add new...</option>
       </select>
-      <input type="text" id="icn" placeholder="New source" style="display:none;margin-top:6px"/>
+      <input type="text" id="icn" placeholder="New source name" style="display:none;margin-top:7px"/>
     </div>
   </div>
-  <button class="bng" onclick="addInc()">Add Income</button>
+  <div class="btn-row">
+    <button class="bng" onclick="addInc()">+ Add Income</button>
+  </div>
 </div>
 
+<!-- Stats -->
 <div class="stats" id="stats"></div>
 
+<!-- Toolbar -->
 <div class="toolbar" id="toolbar">
-  <select id="fp" onchange="dTable()">
-    <option value="">All People</option>
-    <option>Ansar Babu</option><option>Ubaid</option><option>Hassan</option><option>Ayaz</option>
-  </select>
-  <select id="fc" onchange="dTable()">
-    <option value="">All Categories</option>
-    <option>Machine Maintenance - Oil</option><option>Other</option>
-  </select>
-  <input type="text" id="fs" placeholder="Search..." oninput="dTable()" style="width:120px"/>
+  <select id="fp" onchange="render()"><option value="">All People</option><option>Ansar Babu</option><option>Ubaid</option><option>Hassan</option><option>Ayaz</option></select>
+  <select id="fc" onchange="render()"><option value="">All Categories</option><option>Machine Maintenance - Oil</option><option>Other</option></select>
+  <input type="text" id="fs" placeholder="Search..." oninput="render()" style="width:110px"/>
+  <button class="btn-xl" onclick="exportExcel()" style="padding:7px 12px;font-size:.72rem;">⬇ Excel</button>
   <span class="cbn" id="cbn">0</span>
 </div>
 
+<!-- Table -->
 <div id="tv">
-  <div class="tw"><table>
+  <div class="tw"><div class="tw-scroll"><table>
     <thead><tr>
-      <th onclick="srt('dt')">Date</th>
-      <th onclick="srt('ds')">Description</th>
-      <th onclick="srt('am')">Amount</th>
-      <th onclick="srt('wh')">Person</th>
+      <th onclick="srt('dt')">Date ↕</th>
+      <th onclick="srt('ds')">Description ↕</th>
+      <th onclick="srt('am')">Amount ↕</th>
+      <th onclick="srt('wh')">Person ↕</th>
       <th>Type</th><th>Entered</th><th>Actions</th>
     </tr></thead>
     <tbody id="tb"></tbody>
-  </table></div>
+  </table></div></div>
 </div>
 
 <div id="totv" style="display:none"></div>
 
 <div id="catsv" style="display:none">
-  <div class="card"><div class="ctitle">Categories</div><div id="catsb"></div></div>
+  <div class="card"><div class="ctitle">Manage Categories</div><div id="catsb"></div></div>
 </div>
 
 <div id="stmtv" style="display:none">
@@ -242,13 +392,15 @@ tr:last-child td{border-bottom:none;} tr:hover td{background:rgba(255,255,255,.0
     <input type="date" id="st" onchange="dStmt()"/>
     <div class="sflt-sep"></div>
     <button class="sflt-clr" id="btn-clr">Clear</button>
-    <button class="sflt-dl"  id="btn-pdf">&#8681; Download PDF</button>
+    <button class="sflt-xl" id="btn-xl">⬇ Excel</button>
+    <button class="sflt-dl" id="btn-pdf">⬇ PDF</button>
   </div>
   <div id="stmtb"></div>
 </div>
 
-</div><!-- .main -->
+</div>
 
+<!-- Edit Modal -->
 <div class="mbg" id="modal">
   <div class="mbox">
     <div class="mttl">Edit Entry</div>
@@ -256,45 +408,55 @@ tr:last-child td{border-bottom:none;} tr:hover td{background:rgba(255,255,255,.0
     <div class="mf"><label>Amount SAR</label><input type="number" id="m-am" min="0" step="0.01"/></div>
     <div class="mf"><label>Date</label><input type="date" id="m-dt"/></div>
     <div class="mbtns">
-      <button class="msav" id="btn-save">Save</button>
+      <button class="msav" id="btn-save">Save Changes</button>
       <button class="mcan" id="btn-cancel">Cancel</button>
     </div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
-<script>
 
-// ── Pre-loaded Ubaid data from Excel ─────────────────────────
-(function(){
-  var newE=[{"id": 1773222433665, "dt": "2025-11-25", "ds": "", "am": 1782.5, "wh": "Ubaid", "ct": "Mixing Machine Maintenance", "dn": false}, {"id": 1773222433667, "dt": "2025-11-25", "ds": "", "am": 25.0, "wh": "Ubaid", "ct": "Packing Machine Tool", "dn": false}, {"id": 1773222433669, "dt": "2025-11-25", "ds": "", "am": 388.7, "wh": "Ubaid", "ct": "Mixing Machine Maintenance", "dn": false}, {"id": 1773222433671, "dt": "2025-11-25", "ds": "", "am": 85.68, "wh": "Ubaid", "ct": "Emegency Door Channel", "dn": false}, {"id": 1773222433673, "dt": "2025-11-25", "ds": "", "am": 25.0, "wh": "Ubaid", "ct": "Tools", "dn": false}, {"id": 1773222433675, "dt": "2025-11-25", "ds": "", "am": 92.0, "wh": "Ubaid", "ct": "Emegency Door Channel", "dn": false}, {"id": 1773222433677, "dt": "2025-11-25", "ds": "", "am": 46.0, "wh": "Ubaid", "ct": "Air Nipple", "dn": false}, {"id": 1773222433679, "dt": "2025-11-25", "ds": "", "am": 184.0, "wh": "Ubaid", "ct": "Safety Shoe", "dn": false}, {"id": 1773222433681, "dt": "2025-11-25", "ds": "", "am": 62.0, "wh": "Ubaid", "ct": "Plumbing Materials", "dn": false}, {"id": 1773222433683, "dt": "2025-11-25", "ds": "", "am": 591.0, "wh": "Ubaid", "ct": "maintenance", "dn": false}, {"id": 1773222433685, "dt": "2025-11-25", "ds": "", "am": 140.0, "wh": "Ubaid", "ct": "maintenance", "dn": false}, {"id": 1773222433687, "dt": "2025-11-25", "ds": "", "am": 8.0, "wh": "Ubaid", "ct": "Tools", "dn": false}, {"id": 1773222433689, "dt": "2025-11-25", "ds": "", "am": 764.75, "wh": "Ubaid", "ct": "Equipments", "dn": false}, {"id": 1773222433691, "dt": "2025-11-25", "ds": "", "am": 230.0, "wh": "Ubaid", "ct": "8972 Maintenance", "dn": false}, {"id": 1773222433693, "dt": "2025-11-25", "ds": "wage", "am": 200.0, "wh": "Ubaid", "ct": "8972 Maintenance", "dn": false}, {"id": 1773222433695, "dt": "2025-11-25", "ds": "", "am": 40.0, "wh": "Ubaid", "ct": "maintenance", "dn": false}, {"id": 1773222433697, "dt": "2025-11-25", "ds": "", "am": 73.0, "wh": "Ubaid", "ct": "maintenance", "dn": false}, {"id": 1773222433699, "dt": "2025-11-25", "ds": "", "am": 30.0, "wh": "Ubaid", "ct": "Safety Shoe", "dn": false}, {"id": 1773222433701, "dt": "2025-11-25", "ds": "", "am": 42.0, "wh": "Ubaid", "ct": "Factory maintenance", "dn": false}, {"id": 1773222433703, "dt": "2025-11-25", "ds": "", "am": 172.5, "wh": "Ubaid", "ct": "Equipments", "dn": false}, {"id": 1773222433705, "dt": "2025-11-25", "ds": "", "am": 150.0, "wh": "Ubaid", "ct": "Machine maintenance", "dn": false}, {"id": 1773222433707, "dt": "2025-11-25", "ds": "", "am": 316.0, "wh": "Ubaid", "ct": "Machine maintenance", "dn": false}, {"id": 1773222433709, "dt": "2025-11-25", "ds": "", "am": 92.0, "wh": "Ubaid", "ct": "Equipments", "dn": false}, {"id": 1773222433711, "dt": "2025-11-25", "ds": "", "am": 40.0, "wh": "Ubaid", "ct": "Ribit Box", "dn": false}, {"id": 1773222433713, "dt": "2025-11-25", "ds": "", "am": 40.0, "wh": "Ubaid", "ct": "maintenance", "dn": false}, {"id": 1773222433715, "dt": "2025-11-25", "ds": "", "am": 276.0, "wh": "Ubaid", "ct": "Fuel common", "dn": false}, {"id": 1773222433717, "dt": "2025-11-25", "ds": "", "am": 151.0, "wh": "Ubaid", "ct": "Staff food expense", "dn": false}, {"id": 1773222433719, "dt": "2025-11-25", "ds": "", "am": 50.0, "wh": "Ubaid", "ct": "Equipments", "dn": false}, {"id": 1773222433739, "dt": "2026-01-02", "ds": "", "am": 150.0, "wh": "Ubaid", "ct": "Air Nipple", "dn": false}, {"id": 1773222433741, "dt": "2026-01-02", "ds": "", "am": 48.0, "wh": "Ubaid", "ct": "maintenance", "dn": false}, {"id": 1773222433743, "dt": "2026-01-02", "ds": "", "am": 345.0, "wh": "Ubaid", "ct": "Production equipment", "dn": false}, {"id": 1773222433745, "dt": "2026-01-02", "ds": "", "am": 379.0, "wh": "Ubaid", "ct": "Tools - Drill", "dn": false}, {"id": 1773222433747, "dt": "2026-01-02", "ds": "", "am": 260.0, "wh": "Ubaid", "ct": "Machine maintenance - shaft", "dn": false}, {"id": 1773222433749, "dt": "2026-01-02", "ds": "", "am": 20.0, "wh": "Ubaid", "ct": "Machine maintenance - labor charge", "dn": false}, {"id": 1773222433751, "dt": "2026-01-02", "ds": "", "am": 27.6, "wh": "Ubaid", "ct": "Air pipe", "dn": false}, {"id": 1773222433753, "dt": "2026-01-02", "ds": "", "am": 5.0, "wh": "Ubaid", "ct": "Uniform", "dn": false}, {"id": 1773222433755, "dt": "2026-01-02", "ds": "", "am": 412.0, "wh": "Ubaid", "ct": "Machine maintenance", "dn": false}, {"id": 1773222433757, "dt": "2026-01-02", "ds": "", "am": 170.0, "wh": "Ubaid", "ct": "Machine maintenance", "dn": false}, {"id": 1773222433759, "dt": "2026-01-02", "ds": "", "am": 70.0, "wh": "Ubaid", "ct": "Plumbing Materials", "dn": false}, {"id": 1773222433761, "dt": "2026-01-02", "ds": "", "am": 90.0, "wh": "Ubaid", "ct": "Plumbing Materials", "dn": false}, {"id": 1773222433763, "dt": "2026-01-02", "ds": "", "am": 138.0, "wh": "Ubaid", "ct": "Production equipment", "dn": false}, {"id": 1773222433765, "dt": "2026-01-02", "ds": "", "am": 2432.25, "wh": "Ubaid", "ct": "Production equipment", "dn": false}, {"id": 1773222433767, "dt": "2026-01-02", "ds": "", "am": 35.0, "wh": "Ubaid", "ct": "Tools", "dn": false}, {"id": 1773222433769, "dt": "2026-01-02", "ds": "", "am": 450.0, "wh": "Ubaid", "ct": "Shaft Work", "dn": false}, {"id": 1773222433771, "dt": "2026-01-02", "ds": "", "am": 110.0, "wh": "Ubaid", "ct": "Accommodation exp", "dn": false}, {"id": 1773222433773, "dt": "2026-01-02", "ds": "", "am": 270.0, "wh": "Ubaid", "ct": "Food", "dn": false}, {"id": 1773222433775, "dt": "2026-01-02", "ds": "", "am": 414.0, "wh": "Ubaid", "ct": "Vehicle maintenance", "dn": false}, {"id": 1773222433777, "dt": "2026-01-02", "ds": "", "am": 189.0, "wh": "Ubaid", "ct": "Uniform", "dn": false}, {"id": 1773222433779, "dt": "2026-01-02", "ds": "", "am": 350.0, "wh": "Ubaid", "ct": "Vehicle maintenance - labor charge", "dn": false}, {"id": 1773222433791, "dt": "2026-02-13", "ds": "", "am": 350.0, "wh": "Ubaid", "ct": "Machine maintenance - Oil", "dn": false}, {"id": 1773222433793, "dt": "2026-02-13", "ds": "", "am": 185.0, "wh": "Ubaid", "ct": "Fuel expense", "dn": false}, {"id": 1773222433795, "dt": "2026-02-13", "ds": "", "am": 13.0, "wh": "Ubaid", "ct": "Printing & stationery", "dn": false}, {"id": 1773222433797, "dt": "2026-02-13", "ds": "", "am": 17.0, "wh": "Ubaid", "ct": "Oil bottle", "dn": false}, {"id": 1773222433799, "dt": "2026-02-13", "ds": "", "am": 11.0, "wh": "Ubaid", "ct": "Machine maintenance", "dn": false}, {"id": 1773222433801, "dt": "2026-02-13", "ds": "", "am": 210.0, "wh": "Ubaid", "ct": "Food expense", "dn": false}, {"id": 1773222433803, "dt": "2026-02-13", "ds": "", "am": 50.0, "wh": "Ubaid", "ct": "Machine maintenance - Belt stiching", "dn": false}, {"id": 1773222433805, "dt": "2026-02-13", "ds": "", "am": 70.0, "wh": "Ubaid", "ct": "Machine maintenance -  Steel bowl", "dn": false}, {"id": 1773222433807, "dt": "2026-02-13", "ds": "", "am": 30.0, "wh": "Ubaid", "ct": "Machine maintenance -  Spring", "dn": false}, {"id": 1773222433809, "dt": "2026-02-13", "ds": "", "am": 363.0, "wh": "Ubaid", "ct": "Machine maintenance -  Grease", "dn": false}, {"id": 1773222433811, "dt": "2026-02-13", "ds": "", "am": 624.0, "wh": "Ubaid", "ct": "Machine maintenance -  Roller Chain", "dn": false}, {"id": 1773222433813, "dt": "2026-02-13", "ds": "", "am": 759.0, "wh": "Ubaid", "ct": "Equipments - Steel table", "dn": false}, {"id": 1773222433815, "dt": "2026-02-13", "ds": "", "am": 922.0, "wh": "Ubaid", "ct": "Machine maintenance -  Roller Chain", "dn": false}, {"id": 1773222433817, "dt": "2026-02-13", "ds": "", "am": 380.0, "wh": "Ubaid", "ct": "Machine maintenance -  Grease", "dn": false}, {"id": 1773222433819, "dt": "2026-02-13", "ds": "", "am": 576.0, "wh": "Ubaid", "ct": "Machine maintenance -  Belt", "dn": false}, {"id": 1773222433823, "dt": "2026-03-05", "ds": "", "am": 90.0, "wh": "Ubaid", "ct": "Staff food expense", "dn": false}, {"id": 1773222433825, "dt": "2026-03-05", "ds": "", "am": 25.0, "wh": "Ubaid", "ct": "Repairs & maintenance - Hose clipp", "dn": false}, {"id": 1773222433827, "dt": "2026-03-05", "ds": "", "am": 159.0, "wh": "Ubaid", "ct": "Repairs & maintenance", "dn": false}, {"id": 1773222433829, "dt": "2026-03-05", "ds": "", "am": 96.0, "wh": "Ubaid", "ct": "Machine maintenance - Greese nipple", "dn": false}, {"id": 1773222433831, "dt": "2026-03-05", "ds": "", "am": 260.0, "wh": "Ubaid", "ct": "Machine maintenance - Industrial work", "dn": false}, {"id": 1773222433833, "dt": "2026-03-05", "ds": "", "am": 70.0, "wh": "Ubaid", "ct": "Machine maintenance - Oil", "dn": false}, {"id": 1773222433835, "dt": "2026-03-05", "ds": "", "am": 70.0, "wh": "Ubaid", "ct": "Machine maintenance - Oil", "dn": false}, {"id": 1773222433837, "dt": "2026-03-05", "ds": "", "am": 70.0, "wh": "Ubaid", "ct": "Machine maintenance - Oil", "dn": false}, {"id": 1773222433839, "dt": "2026-03-05", "ds": "", "am": 60.0, "wh": "Ubaid", "ct": "Ice", "dn": false}];
-  var newI=[{"id": 1773222433654, "dt": "2025-11-06", "ds": "", "am": 500.0, "rv": "Ubaid", "ct": "Cash received"}, {"id": 1773222433656, "dt": "2025-11-10", "ds": "", "am": 1000.0, "rv": "Ubaid", "ct": "Cash received"}, {"id": 1773222433658, "dt": "2025-11-15", "ds": "", "am": 1500.0, "rv": "Ubaid", "ct": "Cash received"}, {"id": 1773222433660, "dt": "2025-11-15", "ds": "", "am": 1500.0, "rv": "Ubaid", "ct": "Cash received"}, {"id": 1773222433662, "dt": "2025-11-20", "ds": "", "am": 1500.0, "rv": "Ubaid", "ct": "Cash received"}, {"id": 1773222433720, "dt": "2025-11-25", "ds": "", "am": 97.0, "rv": "Ubaid", "ct": "Cash received"}, {"id": 1773222433722, "dt": "2025-11-26", "ds": "", "am": 500.0, "rv": "Ubaid", "ct": "Cash received"}, {"id": 1773222433724, "dt": "2025-11-26", "ds": "", "am": 0.13, "rv": "Ubaid", "ct": "Cash received"}, {"id": 1773222433726, "dt": "2025-12-13", "ds": "", "am": 2500.0, "rv": "Ubaid", "ct": "Cash received"}, {"id": 1773222433728, "dt": "2025-12-15", "ds": "", "am": 400.0, "rv": "Ubaid", "ct": "Cash received"}, {"id": 1773222433730, "dt": "2025-12-17", "ds": "", "am": 500.0, "rv": "Ubaid", "ct": "Cash received"}, {"id": 1773222433732, "dt": "2025-12-21", "ds": "", "am": 1000.0, "rv": "Ubaid", "ct": "Cash received"}, {"id": 1773222433734, "dt": "2025-12-28", "ds": "", "am": 1000.0, "rv": "Ubaid", "ct": "Cash received"}, {"id": 1773222433736, "dt": "2026-01-02", "ds": "", "am": 1000.0, "rv": "Ubaid", "ct": "Cash received"}, {"id": 1773222433780, "dt": "2026-01-10", "ds": "", "am": 964.85, "rv": "Ubaid", "ct": "Cash received"}, {"id": 1773222433782, "dt": "2026-01-20", "ds": "", "am": 500.0, "rv": "Ubaid", "ct": "Cash received"}, {"id": 1773222433784, "dt": "2026-02-04", "ds": "", "am": 500.0, "rv": "Ubaid", "ct": "Cash received"}, {"id": 1773222433786, "dt": "2026-02-07", "ds": "", "am": 1500.0, "rv": "Ubaid", "ct": "Cash received"}, {"id": 1773222433788, "dt": "2026-02-10", "ds": "", "am": 1500.0, "rv": "Ubaid", "ct": "Cash received"}, {"id": 1773222433820, "dt": "2026-02-13", "ds": "", "am": 60.0, "rv": "Ubaid", "ct": "Cash received"}, {"id": 1773222433840, "dt": "2026-03-05", "ds": "", "am": 400.0, "rv": "Ubaid", "ct": "Cash received"}];
-  try{
-    var existing=JSON.parse(localStorage.getItem('pcE')||'[]');
-    var existingIds=existing.map(function(x){return x.id;});
-    for(var i=0;i<newE.length;i++){if(existingIds.indexOf(newE[i].id)<0)existing.push(newE[i]);}
-    localStorage.setItem('pcE',JSON.stringify(existing));
-  }catch(e){localStorage.setItem('pcE',JSON.stringify(newE));}
-  try{
-    var existingI=JSON.parse(localStorage.getItem('pcI')||'[]');
-    var existingIIds=existingI.map(function(x){return x.id;});
-    for(var i=0;i<newI.length;i++){if(existingIIds.indexOf(newI[i].id)<0)existingI.push(newI[i]);}
-    localStorage.setItem('pcI',JSON.stringify(existingI));
-  }catch(e){localStorage.setItem('pcI',JSON.stringify(newI));}
-})();
+<!-- SheetJS for Excel export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
-// ── Data ─────────────────────────────────────────────────────
-var EXPS,INCS,ECAT,ICAT;
-try{EXPS=JSON.parse(localStorage.getItem('pcE')||'[]');}catch(e){EXPS=[];}
-try{INCS=JSON.parse(localStorage.getItem('pcI')||'[]');}catch(e){INCS=[];}
-try{ECAT=JSON.parse(localStorage.getItem('pcEC')||'[]');}catch(e){ECAT=[];}
-try{ICAT=JSON.parse(localStorage.getItem('pcIC')||'[]');}catch(e){ICAT=[];}
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-var TAB='all',SCOL='dt',SDIR=-1,EDITID=null,EDITTYPE=null;
+const firebaseConfig = {
+  apiKey: "AIzaSyA8yjj_tazQDm2L9vJnqbrf0kBQTlcT1xk",
+  authDomain: "pettycashtaj.firebaseapp.com",
+  projectId: "pettycashtaj",
+  storageBucket: "pettycashtaj.firebasestorage.app",
+  messagingSenderId: "417051529795",
+  appId: "1:417051529795:web:b4ed3c5f498fa11900baf6"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const expCol = collection(db, 'expenses');
+const incCol = collection(db, 'incomes');
+const catCol = collection(db, 'categories');
+
+var EXPS=[], INCS=[], ECAT=[], ICAT=[];
+var TAB='all', SCOL='dt', SDIR=-1, EDITID=null, EDITTYPE=null;
 var BASE_E=['Machine Maintenance - Oil','Other'];
 var BASE_I=['Cash Received'];
 
-// ── Login ────────────────────────────────────────────────────
+function toast(m,c){
+  var t=document.getElementById('toast');
+  t.textContent=m;
+  t.style.background=c||'var(--ac)';
+  t.style.color=c?'#fff':'#000';
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},2400);
+}
+function mn(n){return 'SAR '+Number(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');}
+function fd(d){return d||'';}
+function bc(n){return({'Ansar Babu':'ba','Ubaid':'bu','Hassan':'bh','Ayaz':'by','Admin':'bg'})[n]||'bg';}
+
+// Login
 function doLogin(){
   var u=document.getElementById('lu').value.trim();
   var p=document.getElementById('lp').value.trim();
@@ -303,147 +465,148 @@ function doLogin(){
   if(!C.hasOwnProperty(u)){E.textContent='Username not found.';return;}
   if(C[u]!==p){E.textContent='Wrong password.';return;}
   document.getElementById('lw').style.display='none';
-  E.textContent='';
+  document.getElementById('sync-bar').classList.add('show');
   var sel=document.getElementById('epd');
-  for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===u){sel.value=u;break;}}
+  for(var i=0;i<sel.options.length;i++)if(sel.options[i].value===u){sel.value=u;break;}
 }
+window.doLogin=doLogin;
+document.getElementById('lbtn').addEventListener('click',doLogin);
+document.getElementById('lu').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+document.getElementById('lp').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
 
-// ── Storage ──────────────────────────────────────────────────
-function save(){
-  localStorage.setItem('pcE',JSON.stringify(EXPS));
-  localStorage.setItem('pcI',JSON.stringify(INCS));
-  localStorage.setItem('pcEC',JSON.stringify(ECAT));
-  localStorage.setItem('pcIC',JSON.stringify(ICAT));
+// Real-time listeners
+onSnapshot(expCol,function(snap){
+  EXPS=[];
+  snap.forEach(function(d){EXPS.push(Object.assign({_fid:d.id},d.data()));});
+  EXPS.sort(function(a,b){return b.dt.localeCompare(a.dt);});
+  rebuildECat();render();
+});
+onSnapshot(incCol,function(snap){
+  INCS=[];
+  snap.forEach(function(d){INCS.push(Object.assign({_fid:d.id},d.data()));});
+  INCS.sort(function(a,b){return b.dt.localeCompare(a.dt);});
+  render();
+});
+onSnapshot(catCol,function(snap){
+  ECAT=[];ICAT=[];
+  snap.forEach(function(d){var x=d.data();if(x.type==='exp')ECAT.push(x.name);if(x.type==='inc')ICAT.push(x.name);});
+  rebuildECat();rebuildICat();
+});
+
+// Seed
+async function seedIfEmpty(){
+  var snap=await getDocs(expCol);
+  if(!snap.empty)return;
+  var sE=[{"dt":"2025-11-25","ds":"","am":1782.5,"wh":"Ubaid","ct":"Mixing Machine Maintenance","dn":false},{"dt":"2025-11-25","ds":"","am":25.0,"wh":"Ubaid","ct":"Packing Machine Tool","dn":false},{"dt":"2025-11-25","ds":"","am":388.7,"wh":"Ubaid","ct":"Mixing Machine Maintenance","dn":false},{"dt":"2025-11-25","ds":"","am":85.68,"wh":"Ubaid","ct":"Emegency Door Channel","dn":false},{"dt":"2025-11-25","ds":"","am":25.0,"wh":"Ubaid","ct":"Tools","dn":false},{"dt":"2025-11-25","ds":"","am":92.0,"wh":"Ubaid","ct":"Emegency Door Channel","dn":false},{"dt":"2025-11-25","ds":"","am":46.0,"wh":"Ubaid","ct":"Air Nipple","dn":false},{"dt":"2025-11-25","ds":"","am":184.0,"wh":"Ubaid","ct":"Safety Shoe","dn":false},{"dt":"2025-11-25","ds":"","am":62.0,"wh":"Ubaid","ct":"Plumbing Materials","dn":false},{"dt":"2025-11-25","ds":"","am":591.0,"wh":"Ubaid","ct":"maintenance","dn":false},{"dt":"2025-11-25","ds":"","am":140.0,"wh":"Ubaid","ct":"maintenance","dn":false},{"dt":"2025-11-25","ds":"","am":8.0,"wh":"Ubaid","ct":"Tools","dn":false},{"dt":"2025-11-25","ds":"","am":764.75,"wh":"Ubaid","ct":"Equipments","dn":false},{"dt":"2025-11-25","ds":"","am":230.0,"wh":"Ubaid","ct":"8972 Maintenance","dn":false},{"dt":"2025-11-25","ds":"wage","am":200.0,"wh":"Ubaid","ct":"8972 Maintenance","dn":false},{"dt":"2025-11-25","ds":"","am":40.0,"wh":"Ubaid","ct":"maintenance","dn":false},{"dt":"2025-11-25","ds":"","am":73.0,"wh":"Ubaid","ct":"maintenance","dn":false},{"dt":"2025-11-25","ds":"","am":30.0,"wh":"Ubaid","ct":"Safety Shoe","dn":false},{"dt":"2025-11-25","ds":"","am":42.0,"wh":"Ubaid","ct":"Factory maintenance","dn":false},{"dt":"2025-11-25","ds":"","am":172.5,"wh":"Ubaid","ct":"Equipments","dn":false},{"dt":"2025-11-25","ds":"","am":150.0,"wh":"Ubaid","ct":"Machine maintenance","dn":false},{"dt":"2025-11-25","ds":"","am":316.0,"wh":"Ubaid","ct":"Machine maintenance","dn":false},{"dt":"2025-11-25","ds":"","am":92.0,"wh":"Ubaid","ct":"Equipments","dn":false},{"dt":"2025-11-25","ds":"","am":40.0,"wh":"Ubaid","ct":"Ribit Box","dn":false},{"dt":"2025-11-25","ds":"","am":40.0,"wh":"Ubaid","ct":"maintenance","dn":false},{"dt":"2025-11-25","ds":"","am":276.0,"wh":"Ubaid","ct":"Fuel common","dn":false},{"dt":"2025-11-25","ds":"","am":151.0,"wh":"Ubaid","ct":"Staff food expense","dn":false},{"dt":"2025-11-25","ds":"","am":50.0,"wh":"Ubaid","ct":"Equipments","dn":false},{"dt":"2026-01-02","ds":"","am":150.0,"wh":"Ubaid","ct":"Air Nipple","dn":false},{"dt":"2026-01-02","ds":"","am":48.0,"wh":"Ubaid","ct":"maintenance","dn":false},{"dt":"2026-01-02","ds":"","am":345.0,"wh":"Ubaid","ct":"Production equipment","dn":false},{"dt":"2026-01-02","ds":"","am":379.0,"wh":"Ubaid","ct":"Tools - Drill","dn":false},{"dt":"2026-01-02","ds":"","am":260.0,"wh":"Ubaid","ct":"Machine maintenance - shaft","dn":false},{"dt":"2026-01-02","ds":"","am":20.0,"wh":"Ubaid","ct":"Machine maintenance - labor charge","dn":false},{"dt":"2026-01-02","ds":"","am":27.6,"wh":"Ubaid","ct":"Air pipe","dn":false},{"dt":"2026-01-02","ds":"","am":5.0,"wh":"Ubaid","ct":"Uniform","dn":false},{"dt":"2026-01-02","ds":"","am":412.0,"wh":"Ubaid","ct":"Machine maintenance","dn":false},{"dt":"2026-01-02","ds":"","am":170.0,"wh":"Ubaid","ct":"Machine maintenance","dn":false},{"dt":"2026-01-02","ds":"","am":70.0,"wh":"Ubaid","ct":"Plumbing Materials","dn":false},{"dt":"2026-01-02","ds":"","am":90.0,"wh":"Ubaid","ct":"Plumbing Materials","dn":false},{"dt":"2026-01-02","ds":"","am":138.0,"wh":"Ubaid","ct":"Production equipment","dn":false},{"dt":"2026-01-02","ds":"","am":2432.25,"wh":"Ubaid","ct":"Production equipment","dn":false},{"dt":"2026-01-02","ds":"","am":35.0,"wh":"Ubaid","ct":"Tools","dn":false},{"dt":"2026-01-02","ds":"","am":450.0,"wh":"Ubaid","ct":"Shaft Work","dn":false},{"dt":"2026-01-02","ds":"","am":110.0,"wh":"Ubaid","ct":"Accommodation exp","dn":false},{"dt":"2026-01-02","ds":"","am":270.0,"wh":"Ubaid","ct":"Food","dn":false},{"dt":"2026-01-02","ds":"","am":414.0,"wh":"Ubaid","ct":"Vehicle maintenance","dn":false},{"dt":"2026-01-02","ds":"","am":189.0,"wh":"Ubaid","ct":"Uniform","dn":false},{"dt":"2026-01-02","ds":"","am":350.0,"wh":"Ubaid","ct":"Vehicle maintenance - labor charge","dn":false},{"dt":"2026-02-13","ds":"","am":350.0,"wh":"Ubaid","ct":"Machine maintenance - Oil","dn":false},{"dt":"2026-02-13","ds":"","am":185.0,"wh":"Ubaid","ct":"Fuel expense","dn":false},{"dt":"2026-02-13","ds":"","am":13.0,"wh":"Ubaid","ct":"Printing & stationery","dn":false},{"dt":"2026-02-13","ds":"","am":17.0,"wh":"Ubaid","ct":"Oil bottle","dn":false},{"dt":"2026-02-13","ds":"","am":11.0,"wh":"Ubaid","ct":"Machine maintenance","dn":false},{"dt":"2026-02-13","ds":"","am":210.0,"wh":"Ubaid","ct":"Food expense","dn":false},{"dt":"2026-02-13","ds":"","am":50.0,"wh":"Ubaid","ct":"Machine maintenance - Belt stiching","dn":false},{"dt":"2026-02-13","ds":"","am":70.0,"wh":"Ubaid","ct":"Machine maintenance - Steel bowl","dn":false},{"dt":"2026-02-13","ds":"","am":30.0,"wh":"Ubaid","ct":"Machine maintenance - Spring","dn":false},{"dt":"2026-02-13","ds":"","am":363.0,"wh":"Ubaid","ct":"Machine maintenance - Grease","dn":false},{"dt":"2026-02-13","ds":"","am":624.0,"wh":"Ubaid","ct":"Machine maintenance - Roller Chain","dn":false},{"dt":"2026-02-13","ds":"","am":759.0,"wh":"Ubaid","ct":"Equipments - Steel table","dn":false},{"dt":"2026-02-13","ds":"","am":922.0,"wh":"Ubaid","ct":"Machine maintenance - Roller Chain","dn":false},{"dt":"2026-02-13","ds":"","am":380.0,"wh":"Ubaid","ct":"Machine maintenance - Grease","dn":false},{"dt":"2026-02-13","ds":"","am":576.0,"wh":"Ubaid","ct":"Machine maintenance - Belt","dn":false},{"dt":"2026-03-05","ds":"","am":90.0,"wh":"Ubaid","ct":"Staff food expense","dn":false},{"dt":"2026-03-05","ds":"","am":25.0,"wh":"Ubaid","ct":"Repairs & maintenance - Hose clipp","dn":false},{"dt":"2026-03-05","ds":"","am":159.0,"wh":"Ubaid","ct":"Repairs & maintenance","dn":false},{"dt":"2026-03-05","ds":"","am":96.0,"wh":"Ubaid","ct":"Machine maintenance - Greese nipple","dn":false},{"dt":"2026-03-05","ds":"","am":260.0,"wh":"Ubaid","ct":"Machine maintenance - Industrial work","dn":false},{"dt":"2026-03-05","ds":"","am":70.0,"wh":"Ubaid","ct":"Machine maintenance - Oil","dn":false},{"dt":"2026-03-05","ds":"","am":70.0,"wh":"Ubaid","ct":"Machine maintenance - Oil","dn":false},{"dt":"2026-03-05","ds":"","am":70.0,"wh":"Ubaid","ct":"Machine maintenance - Oil","dn":false},{"dt":"2026-03-05","ds":"","am":60.0,"wh":"Ubaid","ct":"Ice","dn":false}];
+  var sI=[{"dt":"2025-11-06","ds":"","am":500.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2025-11-10","ds":"","am":1000.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2025-11-15","ds":"","am":1500.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2025-11-15","ds":"","am":1500.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2025-11-20","ds":"","am":1500.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2025-11-25","ds":"","am":97.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2025-11-26","ds":"","am":500.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2025-11-26","ds":"","am":0.13,"rv":"Ubaid","ct":"Cash received"},{"dt":"2025-12-13","ds":"","am":2500.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2025-12-15","ds":"","am":400.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2025-12-17","ds":"","am":500.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2025-12-21","ds":"","am":1000.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2025-12-28","ds":"","am":1000.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2026-01-02","ds":"","am":1000.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2026-01-10","ds":"","am":964.85,"rv":"Ubaid","ct":"Cash received"},{"dt":"2026-01-20","ds":"","am":500.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2026-02-04","ds":"","am":500.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2026-02-07","ds":"","am":1500.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2026-02-10","ds":"","am":1500.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2026-02-13","ds":"","am":60.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2026-03-05","ds":"","am":400.0,"rv":"Ubaid","ct":"Cash received"}];
+  for(var i=0;i<sE.length;i++)await addDoc(expCol,sE[i]);
+  for(var i=0;i<sI.length;i++)await addDoc(incCol,sI[i]);
+  toast('Data loaded to cloud ✅');
 }
+seedIfEmpty();
 
-// ── Toast ────────────────────────────────────────────────────
-function toast(m){
-  var t=document.getElementById('toast');
-  t.textContent=m;t.classList.add('show');
-  setTimeout(function(){t.classList.remove('show');},2200);
-}
-
-// ── Helpers ──────────────────────────────────────────────────
-function mn(n){return 'SAR '+Number(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');}
-function fd(d){if(!d)return '';return d;}
-function bc(n){var m={'Ansar Babu':'ba','Ubaid':'bu','Hassan':'bh','Ayaz':'by','Admin':'bg'};return m[n]||'bg';}
-
-// ── Category dropdowns ───────────────────────────────────────
+// Category dropdowns
 function rebuildECat(){
   var sel=document.getElementById('ecat'),cur=sel.value;
   while(sel.options.length)sel.remove(0);
-  var all=[''].concat(BASE_E).concat(ECAT).concat(['NEW_EXP']);
-  for(var i=0;i<all.length;i++){
-    var lbl=all[i]===''?'- Select -':all[i]==='NEW_EXP'?'+ Add new...':all[i];
-    sel.add(new Option(lbl,all[i]));
-  }
+  [''].concat(BASE_E).concat(ECAT).concat(['NEW_EXP']).forEach(function(v){
+    sel.add(new Option(v===''?'- Select -':v==='NEW_EXP'?'+ Add new...':v,v));
+  });
   if(cur)sel.value=cur;
   var fc=document.getElementById('fc'),fv=fc.value;
   while(fc.options.length)fc.remove(0);
-  var fo=[''].concat(BASE_E).concat(ECAT);
-  for(var i=0;i<fo.length;i++)fc.add(new Option(fo[i]===''?'All Categories':fo[i],fo[i]));
+  [''].concat(BASE_E).concat(ECAT).forEach(function(v){fc.add(new Option(v===''?'All Categories':v,v));});
   if(fv)fc.value=fv;
 }
 function rebuildICat(){
   var sel=document.getElementById('icat'),cur=sel.value;
   while(sel.options.length)sel.remove(0);
-  var all=[''].concat(BASE_I).concat(ICAT).concat(['NEW_INC']);
-  for(var i=0;i<all.length;i++){
-    var lbl=all[i]===''?'- Select -':all[i]==='NEW_INC'?'+ Add new...':all[i];
-    sel.add(new Option(lbl,all[i]));
-  }
+  [''].concat(BASE_I).concat(ICAT).concat(['NEW_INC']).forEach(function(v){
+    sel.add(new Option(v===''?'- Select -':v==='NEW_INC'?'+ Add new...':v,v));
+  });
   if(cur)sel.value=cur;
 }
 function onEC(){document.getElementById('ecn').style.display=document.getElementById('ecat').value==='NEW_EXP'?'block':'none';}
 function onIC(){document.getElementById('icn').style.display=document.getElementById('icat').value==='NEW_INC'?'block':'none';}
 function getEC(){var v=document.getElementById('ecat').value;return v==='NEW_EXP'?document.getElementById('ecn').value.trim():v;}
 function getIC(){var v=document.getElementById('icat').value;return v==='NEW_INC'?document.getElementById('icn').value.trim():v;}
+window.onEC=onEC;window.onIC=onIC;
 
-// ── Add entries ──────────────────────────────────────────────
-function addExp(){
-  var dt=document.getElementById('ed').value;
-  var ds=document.getElementById('edsc').value.trim();
-  var am=parseFloat(document.getElementById('eamt').value);
-  var wh=document.getElementById('epd').value;
-  var ct=getEC();
-  if(!dt||!wh||!ct||isNaN(am)||am<=0){toast('Fill Date, Amount, Paid By and Category');return;}
-  if(BASE_E.indexOf(ct)<0&&ECAT.indexOf(ct)<0){ECAT.push(ct);rebuildECat();}
-  EXPS.push({id:Date.now(),dt:dt,ds:ds,am:am,wh:wh,ct:ct,dn:false});
-  save();
-  document.getElementById('edsc').value='';
-  document.getElementById('eamt').value='';
-  document.getElementById('epd').value='';
-  document.getElementById('ecat').value='';
-  document.getElementById('ecn').value='';
-  document.getElementById('ecn').style.display='none';
-  toast('Expense added');render();
+// Add entries
+async function addExp(){
+  var dt=document.getElementById('ed').value,ds=document.getElementById('edsc').value.trim();
+  var am=parseFloat(document.getElementById('eamt').value),wh=document.getElementById('epd').value,ct=getEC();
+  if(!dt||!wh||!ct||isNaN(am)||am<=0){toast('Fill all required fields','#ff6b6b');return;}
+  if(BASE_E.indexOf(ct)<0&&ECAT.indexOf(ct)<0)await addDoc(catCol,{type:'exp',name:ct});
+  await addDoc(expCol,{dt,ds,am,wh,ct,dn:false});
+  document.getElementById('edsc').value='';document.getElementById('eamt').value='';
+  document.getElementById('epd').value='';document.getElementById('ecat').value='';
+  document.getElementById('ecn').value='';document.getElementById('ecn').style.display='none';
+  toast('Expense added ✅');
 }
-function addInc(){
-  var dt=document.getElementById('ind').value;
-  var ds=document.getElementById('indsc').value.trim();
-  var am=parseFloat(document.getElementById('inamt').value);
-  var rv=document.getElementById('inrv').value;
-  var ct=getIC();
-  if(!dt||!rv||!ct||isNaN(am)||am<=0){toast('Fill Date, Amount, Received By and Source');return;}
-  if(BASE_I.indexOf(ct)<0&&ICAT.indexOf(ct)<0){ICAT.push(ct);rebuildICat();}
-  INCS.push({id:Date.now(),dt:dt,ds:ds,am:am,rv:rv,ct:ct});
-  save();
-  document.getElementById('indsc').value='';
-  document.getElementById('inamt').value='';
-  document.getElementById('inrv').value='';
-  document.getElementById('icat').value='';
-  document.getElementById('icn').value='';
-  document.getElementById('icn').style.display='none';
-  toast('Income added');render();
+async function addInc(){
+  var dt=document.getElementById('ind').value,ds=document.getElementById('indsc').value.trim();
+  var am=parseFloat(document.getElementById('inamt').value),rv=document.getElementById('inrv').value,ct=getIC();
+  if(!dt||!rv||!ct||isNaN(am)||am<=0){toast('Fill all required fields','#ff6b6b');return;}
+  if(BASE_I.indexOf(ct)<0&&ICAT.indexOf(ct)<0)await addDoc(catCol,{type:'inc',name:ct});
+  await addDoc(incCol,{dt,ds,am,rv,ct});
+  document.getElementById('indsc').value='';document.getElementById('inamt').value='';
+  document.getElementById('inrv').value='';document.getElementById('icat').value='';
+  document.getElementById('icn').value='';document.getElementById('icn').style.display='none';
+  toast('Income added ✅');
 }
+window.addExp=addExp;window.addInc=addInc;
 
-// ── Delete / toggle ──────────────────────────────────────────
-function dlExp(id){if(!confirm('Delete?'))return;EXPS=EXPS.filter(function(x){return x.id!==id;});save();render();}
-function dlInc(id){if(!confirm('Delete?'))return;INCS=INCS.filter(function(x){return x.id!==id;});save();render();}
-function tgDn(id){
-  for(var i=0;i<EXPS.length;i++){if(EXPS[i].id===id){EXPS[i].dn=!EXPS[i].dn;save();render();return;}}
-}
+// Delete / toggle
+async function dlExp(fid){if(!confirm('Delete this expense?'))return;await deleteDoc(doc(db,'expenses',fid));toast('Deleted');}
+async function dlInc(fid){if(!confirm('Delete this income?'))return;await deleteDoc(doc(db,'incomes',fid));toast('Deleted');}
+async function tgDn(fid,cur){await updateDoc(doc(db,'expenses',fid),{dn:!cur});}
 
-// ── Edit modal ───────────────────────────────────────────────
-function opEdit(tp,id){
+// Edit
+function opEdit(tp,fid){
   var list=tp==='e'?EXPS:INCS,item=null;
-  for(var i=0;i<list.length;i++)if(list[i].id===id){item=list[i];break;}
+  list.forEach(function(x){if(x._fid===fid)item=x;});
   if(!item)return;
-  EDITID=id;EDITTYPE=tp;
+  EDITID=fid;EDITTYPE=tp;
   document.getElementById('m-ds').value=item.ds||'';
   document.getElementById('m-am').value=item.am;
   document.getElementById('m-dt').value=item.dt;
   document.getElementById('modal').classList.add('open');
 }
-function svEdit(){
+async function svEdit(){
   var ds=document.getElementById('m-ds').value.trim();
   var am=parseFloat(document.getElementById('m-am').value);
   var dt=document.getElementById('m-dt').value;
-  if(!dt||isNaN(am)||am<=0){toast('Fill all fields');return;}
-  var list=EDITTYPE==='e'?EXPS:INCS;
-  for(var i=0;i<list.length;i++){
-    if(list[i].id===EDITID){list[i].ds=ds;list[i].am=am;list[i].dt=dt;break;}
-  }
-  save();
+  if(!dt||isNaN(am)||am<=0){toast('Fill all fields','#ff6b6b');return;}
+  await updateDoc(doc(db,EDITTYPE==='e'?'expenses':'incomes',EDITID),{ds,am,dt});
   document.getElementById('modal').classList.remove('open');
-  render();toast('Updated');
+  toast('Updated ✅');
+}
+window.opEdit=opEdit;
+
+// Cat delete
+async function delEC(c){
+  if(!confirm('Delete category: '+c+'?'))return;
+  var snap=await getDocs(catCol);
+  snap.forEach(async function(d){if(d.data().name===c&&d.data().type==='exp')await deleteDoc(doc(db,'categories',d.id));});
+}
+async function delIC(c){
+  if(!confirm('Delete source: '+c+'?'))return;
+  var snap=await getDocs(catCol);
+  snap.forEach(async function(d){if(d.data().name===c&&d.data().type==='inc')await deleteDoc(doc(db,'categories',d.id));});
 }
 
-// ── Custom category delete ───────────────────────────────────
-function delEC(c){if(!confirm('Delete: '+c+'?'))return;ECAT=ECAT.filter(function(x){return x!==c;});save();rebuildECat();dCats();}
-function delIC(c){if(!confirm('Delete: '+c+'?'))return;ICAT=ICAT.filter(function(x){return x!==c;});save();rebuildICat();dCats();}
+// Sort
+function srt(col){if(SCOL===col)SDIR=-SDIR;else{SCOL=col;SDIR=-1;}render();}
+window.srt=srt;
 
-// ── Sort ─────────────────────────────────────────────────────
-function srt(col){if(SCOL===col)SDIR=-SDIR;else{SCOL=col;SDIR=-1;}dTable();}
-
-// ── Tab switching ────────────────────────────────────────────
+// Tab
 function setTab(tab){
   TAB=tab;
-  var all=['all','inc','todo','tot','cats','stmt'];
-  for(var i=0;i<all.length;i++){
-    var el=document.getElementById('tab-'+all[i]);
-    if(el)el.className='tab'+(all[i]===tab?' active':'');
-  }
+  ['all','inc','todo','tot','cats','stmt'].forEach(function(t){
+    var el=document.getElementById('tab-'+t);if(el)el.className='tab'+(t===tab?' active':'');
+    var mb=document.getElementById('mnb-'+t);if(mb)mb.className='mnb'+(t===tab?' active':'');
+  });
   var sh=function(id,v){var el=document.getElementById(id);if(el)el.style.display=v;};
   sh('exp-form',(tab==='inc'||tab==='cats'||tab==='stmt')?'none':'block');
   sh('inc-form',tab==='inc'?'block':'none');
@@ -454,289 +617,269 @@ function setTab(tab){
   sh('stmtv',tab==='stmt'?'block':'none');
   render();
 }
+window.setTab=setTab;
 
-// ── Stats cards ──────────────────────────────────────────────
+// Stats
 function dStats(){
   var te=0,ti=0,pd=0;
-  for(var i=0;i<EXPS.length;i++){te+=EXPS[i].am;if(!EXPS[i].dn)pd++;}
-  for(var i=0;i<INCS.length;i++)ti+=INCS[i].am;
-  var bl=ti-te;
-  var el=document.getElementById('stats');el.innerHTML='';
+  EXPS.forEach(function(e){te+=e.am;if(!e.dn)pd++;});
+  INCS.forEach(function(i){ti+=i.am;});
+  var bl=ti-te,el=document.getElementById('stats');el.innerHTML='';
   function sc(lbl,val,cls,sub){
     var d=document.createElement('div');d.className='sc';
-    d.innerHTML='<div class="scl">'+lbl+'<\/div><div class="scv '+cls+'">'+val+'<\/div><div class="scs">'+sub+'<\/div>';
+    d.innerHTML='<div class="scl">'+lbl+'</div><div class="scv '+cls+'">'+val+'</div><div class="scs">'+sub+'</div>';
     el.appendChild(d);
   }
   sc('Total Income',mn(ti),'gp',INCS.length+' entries');
   sc('Total Expenses',mn(te),'rp',EXPS.length+' entries');
   sc('Balance',mn(Math.abs(bl)),bl>=0?'gp':'rp',bl>=0?'Surplus':'Deficit');
   sc('Pending',pd,'rp','not entered');
-  var PP=['Ansar Babu','Ubaid','Hassan','Ayaz'];
-  for(var pi=0;pi<PP.length;pi++){
-    var p=PP[pi],pe=0,pi2=0,ec=0,ic=0;
-    for(var i=0;i<EXPS.length;i++)if(EXPS[i].wh===p){pe+=EXPS[i].am;ec++;}
-    for(var i=0;i<INCS.length;i++)if(INCS[i].rv===p){pi2+=INCS[i].am;ic++;}
-    var pb=pi2-pe;
+  ['Ansar Babu','Ubaid','Hassan','Ayaz'].forEach(function(p){
+    var pe=0,pi=0,ec=0,ic=0;
+    EXPS.forEach(function(e){if(e.wh===p){pe+=e.am;ec++;}});
+    INCS.forEach(function(i){if(i.rv===p){pi+=i.am;ic++;}});
+    var pb=pi-pe;
     sc(p,mn(Math.abs(pb)),pb>=0?'gp':'rp',(pb>=0?'Surplus':'Deficit')+' · '+ec+'e/'+ic+'i');
-  }
+  });
 }
 
-// ── Table row builder ────────────────────────────────────────
+// Table row
 function makeRow(e,isInc){
   var tr=document.createElement('tr');
-  if(isInc)tr.style.borderLeft='3px solid rgba(63,185,80,.35)';
+  if(isInc)tr.style.borderLeft='3px solid rgba(74,222,128,.3)';
   function td(cls,html){var c=document.createElement('td');c.className=cls||'';c.innerHTML=html||'';return c;}
   tr.appendChild(td('dc',fd(e.dt)));
-  tr.appendChild(td('',(e.ds||'<span style="color:var(--mu)">-<\/span>')+'<br><span class="cb">'+e.ct+'<\/span>'));
+  tr.appendChild(td('',(e.ds||'<span style="color:var(--mu)">—</span>')+'<br><span class="cb">'+e.ct+'</span>'));
   tr.appendChild(td(isInc?'ai':'ae',mn(e.am)));
-  tr.appendChild(td('','<span class="bdg '+bc(isInc?e.rv:e.wh)+'">'+(isInc?e.rv:e.wh)+'<\/span>'));
-  tr.appendChild(td('','<span class="'+(isInc?'ti':'te')+'">'+(isInc?'Income':'Expense')+'<\/span>'));
+  tr.appendChild(td('','<span class="bdg '+bc(isInc?e.rv:e.wh)+'">'+(isInc?e.rv:e.wh)+'</span>'));
+  tr.appendChild(td('','<span class="'+(isInc?'ti':'te')+'">'+(isInc?'Income':'Expense')+'</span>'));
   if(!isInc){
     var ck=document.createElement('td');ck.style.textAlign='center';
     var dv=document.createElement('div');dv.className='ck'+(e.dn?' on':'');dv.textContent=e.dn?'✓':'';
-    (function(id){dv.onclick=function(){tgDn(id);};})(e.id);
+    (function(fid,dn){dv.onclick=function(){tgDn(fid,dn);};})(e._fid,e.dn);
     ck.appendChild(dv);tr.appendChild(ck);
-  } else {tr.appendChild(td('',''));}
+  }else{tr.appendChild(td('',''));}
   var ac=document.createElement('td');
   var be=document.createElement('button');be.className='ibed';be.textContent='✎';be.title='Edit';
-  (function(tp,id){be.onclick=function(){opEdit(tp,id);};})(isInc?'i':'e',e.id);
+  (function(tp,fid){be.onclick=function(){opEdit(tp,fid);};})(isInc?'i':'e',e._fid);
   var bd=document.createElement('button');bd.className='ibde';bd.textContent='✕';bd.title='Delete';
-  (function(tp,id){bd.onclick=function(){if(tp==='i')dlInc(id);else dlExp(id);};})(isInc?'i':'e',e.id);
+  (function(tp,fid){bd.onclick=function(){tp==='i'?dlInc(fid):dlExp(fid);};})(isInc?'i':'e',e._fid);
   ac.appendChild(be);ac.appendChild(bd);tr.appendChild(ac);
   return tr;
 }
 
-// ── Table display ────────────────────────────────────────────
+// Table display
 function dTable(){
   var tb=document.getElementById('tb');tb.innerHTML='';
   if(TAB==='inc'){
     var sr=INCS.slice().sort(function(a,b){return b.dt.localeCompare(a.dt);});
     document.getElementById('cbn').textContent=sr.length;
-    if(!sr.length){var r=document.createElement('tr');var c=document.createElement('td');c.colSpan=7;c.innerHTML='<div style="text-align:center;padding:40px;color:var(--mu)">No income yet.<\/div>';r.appendChild(c);tb.appendChild(r);return;}
-    for(var i=0;i<sr.length;i++)tb.appendChild(makeRow(sr[i],true));return;
+    if(!sr.length){var r=document.createElement('tr');var c=document.createElement('td');c.colSpan=7;c.innerHTML='<div style="text-align:center;padding:40px;color:var(--mu)">No income yet.</div>';r.appendChild(c);tb.appendChild(r);return;}
+    sr.forEach(function(e){tb.appendChild(makeRow(e,true));});return;
   }
   var fp=document.getElementById('fp').value,fc=document.getElementById('fc').value;
   var fs=document.getElementById('fs').value.toLowerCase();
   var data=EXPS.slice();
-  if(TAB==='todo')data=data.filter(function(e){return !e.dn;});
+  if(TAB==='todo')data=data.filter(function(e){return!e.dn;});
   if(fp)data=data.filter(function(e){return e.wh===fp;});
   if(fc)data=data.filter(function(e){return e.ct===fc;});
-  if(fs)data=data.filter(function(e){return (e.ds||'').toLowerCase().indexOf(fs)>-1||e.wh.toLowerCase().indexOf(fs)>-1||e.ct.toLowerCase().indexOf(fs)>-1;});
+  if(fs)data=data.filter(function(e){return(e.ds||'').toLowerCase().includes(fs)||e.wh.toLowerCase().includes(fs)||e.ct.toLowerCase().includes(fs);});
   data.sort(function(a,b){
-    var av,bv;
-    if(SCOL==='dt'){av=a.dt;bv=b.dt;}
-    else if(SCOL==='ds'){av=a.ds||'';bv=b.ds||'';}
-    else if(SCOL==='am'){av=a.am;bv=b.am;}
-    else{av=a.wh;bv=b.wh;}
+    var av=SCOL==='dt'?a.dt:SCOL==='ds'?a.ds||'':SCOL==='am'?a.am:a.wh;
+    var bv=SCOL==='dt'?b.dt:SCOL==='ds'?b.ds||'':SCOL==='am'?b.am:b.wh;
     return av<bv?SDIR:av>bv?-SDIR:0;
   });
   var rows=[];
   if(TAB==='all'){
-    for(var i=0;i<data.length;i++)rows.push({t:'e',e:data[i]});
-    for(var i=0;i<INCS.length;i++)rows.push({t:'i',e:INCS[i]});
+    data.forEach(function(e){rows.push({t:'e',e:e});});
+    INCS.forEach(function(e){rows.push({t:'i',e:e});});
     rows.sort(function(a,b){return b.e.dt.localeCompare(a.e.dt);});
-  } else {for(var i=0;i<data.length;i++)rows.push({t:'e',e:data[i]});}
+  }else{data.forEach(function(e){rows.push({t:'e',e:e});});}
   document.getElementById('cbn').textContent=rows.length;
   if(!rows.length){
     var r=document.createElement('tr');var c=document.createElement('td');c.colSpan=7;
-    c.innerHTML='<div style="text-align:center;padding:40px;color:var(--mu)">'+(TAB==='todo'?'All caught up! ✅':'No entries yet.')+'<\/div>';
+    c.innerHTML='<div style="text-align:center;padding:40px;color:var(--mu)">'+(TAB==='todo'?'All caught up! ✅':'No entries yet.')+'</div>';
     r.appendChild(c);tb.appendChild(r);return;
   }
-  for(var i=0;i<rows.length;i++)tb.appendChild(makeRow(rows[i].e,rows[i].t==='i'));
+  rows.forEach(function(row){tb.appendChild(makeRow(row.e,row.t==='i'));});
 }
 
-// ── Totals tab ───────────────────────────────────────────────
+// Totals
 function dTots(){
   var el=document.getElementById('totv');el.innerHTML='';
-  var PP=['Ansar Babu','Ubaid','Hassan','Ayaz'];
-  for(var pi=0;pi<PP.length;pi++){
-    var p=PP[pi],rows=[],tot=0,pnd=0;
-    for(var i=0;i<EXPS.length;i++)if(EXPS[i].wh===p)rows.push(EXPS[i]);
+  ['Ansar Babu','Ubaid','Hassan','Ayaz'].forEach(function(p){
+    var rows=[],tot=0,pnd=0;
+    EXPS.forEach(function(e){if(e.wh===p)rows.push(e);});
     rows.sort(function(a,b){return b.dt.localeCompare(a.dt);});
-    for(var i=0;i<rows.length;i++){tot+=rows[i].am;if(!rows[i].dn)pnd++;}
+    rows.forEach(function(e){tot+=e.am;if(!e.dn)pnd++;});
     var pg=document.createElement('div');pg.className='pg';
     var hd=document.createElement('div');hd.className='pgh';
-    hd.innerHTML='<div style="display:flex;align-items:center;gap:8px"><span class="bdg '+bc(p)+'">'+p+'<\/span><span style="font-size:.69rem;color:var(--mu)">'+rows.length+' entries · '+pnd+' pending<\/span><\/div><div class="rp" style="font-weight:600">'+mn(tot)+'<\/div>';
+    hd.innerHTML='<div style="display:flex;align-items:center;gap:8px"><span class="bdg '+bc(p)+'">'+p+'</span><span style="font-size:.66rem;color:var(--mu2)">'+rows.length+' entries · '+pnd+' pending</span></div><div class="rp" style="font-weight:700">'+mn(tot)+'</div>';
     pg.appendChild(hd);
     var body=document.createElement('div');
     if(!rows.length){var r=document.createElement('div');r.className='pgr';r.style.color='var(--mu)';r.textContent='No entries';body.appendChild(r);}
-    else for(var i=0;i<rows.length;i++){
-      var e=rows[i];
+    else rows.forEach(function(e){
       var r=document.createElement('div');r.className='pgr';
-      r.innerHTML='<span class="pgrd">'+fd(e.dt)+'<\/span><span class="pgrdsc">'+(e.ds||'-')+'<\/span><span class="cb">'+e.ct+'<\/span><span class="pgra">'+mn(e.am)+'<\/span>';
+      r.innerHTML='<span class="pgrd">'+fd(e.dt)+'</span><span class="pgrdsc">'+(e.ds||'—')+'</span><span class="cb">'+e.ct+'</span><span class="pgra">'+mn(e.am)+'</span>';
       var ck=document.createElement('div');ck.className='ck'+(e.dn?' on':'');ck.textContent=e.dn?'✓':'';ck.style.marginLeft='6px';
-      (function(id){ck.onclick=function(){tgDn(id);};})(e.id);
+      (function(fid,dn){ck.onclick=function(){tgDn(fid,dn);};})(e._fid,e.dn);
       r.appendChild(ck);body.appendChild(r);
-    }
+    });
     pg.appendChild(body);el.appendChild(pg);
-  }
+  });
 }
 
-// ── Categories tab ───────────────────────────────────────────
+// Categories
 function dCats(){
   var el=document.getElementById('catsb');el.innerHTML='';
   function section(title,arr,fn){
     if(!arr.length)return;
     var h=document.createElement('div');h.style.marginBottom='16px';
-    var t=document.createElement('div');t.style.cssText='font-size:.67rem;color:var(--mu);text-transform:uppercase;letter-spacing:1px;margin-bottom:9px';t.textContent=title;h.appendChild(t);
-    for(var i=0;i<arr.length;i++){
+    var t=document.createElement('div');t.style.cssText='font-size:.62rem;color:var(--mu2);text-transform:uppercase;letter-spacing:1px;margin-bottom:9px;font-weight:600';t.textContent=title;h.appendChild(t);
+    arr.forEach(function(c){
       var row=document.createElement('div');row.className='ci';
-      var sp=document.createElement('span');sp.textContent=arr[i];
+      var sp=document.createElement('span');sp.style.fontSize='.82rem';sp.textContent=c;
       var btn=document.createElement('button');btn.className='cdl';btn.textContent='✕ Delete';
-      (function(c){btn.onclick=function(){fn(c);};})(arr[i]);
+      btn.onclick=function(){fn(c);};
       row.appendChild(sp);row.appendChild(btn);h.appendChild(row);
-    }
+    });
     el.appendChild(h);
   }
   section('Custom Expense Categories',ECAT,delEC);
   section('Custom Income Sources',ICAT,delIC);
   if(!ECAT.length&&!ICAT.length){
-    var d=document.createElement('div');d.style.cssText='color:var(--mu);text-align:center;padding:22px;font-size:.83rem';
+    var d=document.createElement('div');d.style.cssText='color:var(--mu);text-align:center;padding:22px;font-size:.82rem';
     d.textContent='No custom categories yet.';el.appendChild(d);
   }
 }
 
-// ── Statement tab ────────────────────────────────────────────
+// Statement
 function dStmt(){
-  var fr=document.getElementById('sf').value;
-  var to=document.getElementById('st').value;
+  var fr=document.getElementById('sf').value,to=document.getElementById('st').value;
   var pu=document.getElementById('spu').value;
   var el=document.getElementById('stmtb');el.innerHTML='';
   var PP=pu?[pu]:['Ansar Babu','Ubaid','Hassan','Ayaz','Admin'];
   var AVCOLS={'Ansar Babu':'ba','Ubaid':'bu','Hassan':'bh','Ayaz':'by','Admin':'bg'};
   var any=false;
-  for(var pi=0;pi<PP.length;pi++){
-    var p=PP[pi],pE=[],pI=[];
-    for(var i=0;i<EXPS.length;i++){
-      var ex=EXPS[i];
-      if(ex.wh!==p||(fr&&ex.dt<fr)||(to&&ex.dt>to))continue;
-      pE.push(ex);
-    }
-    for(var i=0;i<INCS.length;i++){
-      var inc=INCS[i];
-      if(inc.rv!==p||(fr&&inc.dt<fr)||(to&&inc.dt>to))continue;
-      pI.push(inc);
-    }
-    if(!pE.length&&!pI.length)continue;
+  PP.forEach(function(p){
+    var pE=[],pI=[];
+    EXPS.forEach(function(e){if(e.wh===p&&!(fr&&e.dt<fr)&&!(to&&e.dt>to))pE.push(e);});
+    INCS.forEach(function(i){if(i.rv===p&&!(fr&&i.dt<fr)&&!(to&&i.dt>to))pI.push(i);});
+    if(!pE.length&&!pI.length)return;
     any=true;
     var all=[];
-    for(var i=0;i<pI.length;i++)all.push({dt:pI[i].dt,ds:pI[i].ds,ct:pI[i].ct,am:pI[i].am,type:'i'});
-    for(var i=0;i<pE.length;i++)all.push({dt:pE[i].dt,ds:pE[i].ds,ct:pE[i].ct,am:pE[i].am,type:'e'});
+    pI.forEach(function(i){all.push({dt:i.dt,ds:i.ds,ct:i.ct,am:i.am,type:'i'});});
+    pE.forEach(function(e){all.push({dt:e.dt,ds:e.ds,ct:e.ct,am:e.am,type:'e'});});
     all.sort(function(a,b){return a.dt.localeCompare(b.dt);});
     var tI=0,tE=0;
-    for(var i=0;i<pI.length;i++)tI+=pI[i].am;
-    for(var i=0;i<pE.length;i++)tE+=pE[i].am;
+    pI.forEach(function(i){tI+=i.am;});pE.forEach(function(e){tE+=e.am;});
     var finalBal=tI-tE;
-    // Card
     var card=document.createElement('div');card.className='stc';
-    // Header
     var hd=document.createElement('div');hd.className='sth';
     var left=document.createElement('div');left.className='sth-left';
     var av=document.createElement('div');av.className='sth-avatar bdg '+(AVCOLS[p]||'bg');av.textContent=p.slice(0,2).toUpperCase();
     var info=document.createElement('div');
     var nm=document.createElement('div');nm.className='sth-name';nm.textContent=p;
     var mt=document.createElement('div');mt.className='sth-meta';mt.textContent=pI.length+' income · '+pE.length+' expenses';
-    info.appendChild(nm);info.appendChild(mt);
-    left.appendChild(av);left.appendChild(info);
+    info.appendChild(nm);info.appendChild(mt);left.appendChild(av);left.appendChild(info);
     var bBox=document.createElement('div');bBox.className='sth-bal';
     var bLbl=document.createElement('div');bLbl.className='sth-bal-lbl';bLbl.textContent='Balance';
     var bVal=document.createElement('div');bVal.className='sth-bal-val '+(finalBal>=0?'gp':'rp');
     bVal.textContent=(finalBal>=0?'+':'')+mn(finalBal);
-    bBox.appendChild(bLbl);bBox.appendChild(bVal);
-    hd.appendChild(left);hd.appendChild(bBox);card.appendChild(hd);
-    // Table
+    bBox.appendChild(bLbl);bBox.appendChild(bVal);hd.appendChild(left);hd.appendChild(bBox);card.appendChild(hd);
     var tbl=document.createElement('table');tbl.className='stbl';
-    var thead=document.createElement('thead');
-    var hr=document.createElement('tr');
-    function mth(txt,r){var t=document.createElement('th');t.textContent=txt;if(r)t.className='r';return t;}
-    hr.appendChild(mth('Date'));hr.appendChild(mth('Description'));hr.appendChild(mth('Category'));
-    hr.appendChild(mth('Income',true));hr.appendChild(mth('Expense',true));hr.appendChild(mth('Balance',true));
+    var thead=document.createElement('thead');var hr=document.createElement('tr');
+    ['Date','Description','Category'].forEach(function(t){var th=document.createElement('th');th.textContent=t;hr.appendChild(th);});
+    ['Income','Expense','Balance'].forEach(function(t){var th=document.createElement('th');th.className='r';th.textContent=t;hr.appendChild(th);});
     thead.appendChild(hr);tbl.appendChild(thead);
     var tbody=document.createElement('tbody'),running=0;
-    for(var i=0;i<all.length;i++){
-      var row=all[i],isI=(row.type==='i');
-      if(isI)running+=row.am;else running-=row.am;
+    all.forEach(function(row){
+      var isI=row.type==='i';if(isI)running+=row.am;else running-=row.am;
       var tr=document.createElement('tr');
       function mkTd(cls,txt){var c=document.createElement('td');c.className=cls||'';c.textContent=txt||'';return c;}
-      tr.appendChild(mkTd('td-date',fd(row.dt)));
-      tr.appendChild(mkTd('',row.ds||'—'));
+      tr.appendChild(mkTd('td-date',fd(row.dt)));tr.appendChild(mkTd('',row.ds||'—'));
       var cTd=document.createElement('td');var cSp=document.createElement('span');cSp.className='td-cat';cSp.textContent=row.ct;cTd.appendChild(cSp);tr.appendChild(cTd);
       tr.appendChild(mkTd('r'+(isI?' td-inc':''),isI?mn(row.am):''));
       tr.appendChild(mkTd('r'+(!isI?' td-exp':''),!isI?mn(row.am):''));
       tr.appendChild(mkTd('r '+(running>=0?'td-bal-pos':'td-bal-neg'),mn(running)));
       tbody.appendChild(tr);
-    }
-    // Totals row
+    });
     var trF=document.createElement('tr');trF.className='fr-row';
-    var tdL=document.createElement('td');tdL.colSpan=3;tdL.style.cssText='font-size:.7rem;color:var(--mu);text-transform:uppercase;letter-spacing:1px;padding:12px 16px;';tdL.textContent='Total';trF.appendChild(tdL);
+    var tdL=document.createElement('td');tdL.colSpan=3;tdL.style.cssText='font-size:.62rem;color:var(--mu2);text-transform:uppercase;letter-spacing:1px;padding:12px 16px;font-weight:700';tdL.textContent='Total';trF.appendChild(tdL);
     var tdI=document.createElement('td');tdI.className='r td-inc';tdI.textContent=mn(tI);trF.appendChild(tdI);
     var tdE=document.createElement('td');tdE.className='r td-exp';tdE.textContent=mn(tE);trF.appendChild(tdE);
     var tdB=document.createElement('td');tdB.className='r '+(finalBal>=0?'td-bal-pos':'td-bal-neg');tdB.textContent=mn(finalBal);trF.appendChild(tdB);
-    tbody.appendChild(trF);
-    tbl.appendChild(tbody);card.appendChild(tbl);el.appendChild(card);
-  }
+    tbody.appendChild(trF);tbl.appendChild(tbody);card.appendChild(tbl);el.appendChild(card);
+  });
   if(!any){
     var d=document.createElement('div');d.style.cssText='text-align:center;padding:60px 20px;color:var(--mu)';
-    d.innerHTML='<div style="font-size:2.5rem;margin-bottom:12px">📋<\/div><div style="font-size:.9rem">No data found.<\/div>';
+    d.innerHTML='<div style="font-size:2.5rem;margin-bottom:12px">📋</div><div style="font-size:.88rem">No data found for selected filters.</div>';
     el.appendChild(d);
   }
 }
+window.dStmt=dStmt;
 
-// ── Download statement PDF ───────────────────────────────────
-function dlStmt(){
+// Excel export (all data)
+function exportExcel(){
+  var wb=XLSX.utils.book_new();
+  // Expenses sheet
+  var eData=[['Date','Description','Category','Amount SAR','Paid By','Entered']];
+  EXPS.forEach(function(e){eData.push([e.dt,e.ds||'',e.ct,e.am,e.wh,e.dn?'Yes':'No']);});
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(eData),'Expenses');
+  // Income sheet
+  var iData=[['Date','Description','Category','Amount SAR','Received By']];
+  INCS.forEach(function(i){iData.push([i.dt,i.ds||'',i.ct,i.am,i.rv]);});
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(iData),'Income');
+  // Summary sheet
+  var sData=[['Person','Total Expenses','Total Income','Balance']];
+  ['Ansar Babu','Ubaid','Hassan','Ayaz'].forEach(function(p){
+    var pe=0,pi=0;
+    EXPS.forEach(function(e){if(e.wh===p)pe+=e.am;});
+    INCS.forEach(function(i){if(i.rv===p)pi+=i.am;});
+    sData.push([p,pe,pi,pi-pe]);
+  });
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(sData),'Summary');
+  XLSX.writeFile(wb,'PettyCash_TAJ_'+new Date().toISOString().slice(0,10)+'.xlsx');
+  toast('Excel downloaded ✅');
+}
+window.exportExcel=exportExcel;
+
+// Excel export (statement filtered)
+function exportStmtExcel(){
+  var fr=document.getElementById('sf').value,to=document.getElementById('st').value;
   var pu=document.getElementById('spu').value;
-  var fr=document.getElementById('sf').value;
-  var to=document.getElementById('st').value;
-  var title='Petty Cash TAJ — Statement';
-  if(pu)title+=' — '+pu;
-  if(fr||to)title+=' ('+(fr?fd(fr):'')+(fr&&to?' to ':'')+(to?fd(to):'')+')';
+  var wb=XLSX.utils.book_new();
+  var PP=pu?[pu]:['Ansar Babu','Ubaid','Hassan','Ayaz','Admin'];
+  PP.forEach(function(p){
+    var pE=[],pI=[];
+    EXPS.forEach(function(e){if(e.wh===p&&!(fr&&e.dt<fr)&&!(to&&e.dt>to))pE.push(e);});
+    INCS.forEach(function(i){if(i.rv===p&&!(fr&&i.dt<fr)&&!(to&&i.dt>to))pI.push(i);});
+    if(!pE.length&&!pI.length)return;
+    var data=[['Date','Description','Category','Type','Amount SAR']];
+    pI.forEach(function(i){data.push([i.dt,i.ds||'',i.ct,'Income',i.am]);});
+    pE.forEach(function(e){data.push([e.dt,e.ds||'',e.ct,'Expense',e.am]);});
+    data.sort(function(a,b){return a[0].localeCompare(b[0]);});
+    XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(data),p.substring(0,31));
+  });
+  XLSX.writeFile(wb,'Statement_TAJ_'+new Date().toISOString().slice(0,10)+'.xlsx');
+  toast('Excel downloaded ✅');
+}
+window.exportStmtExcel=exportStmtExcel;
+
+// PDF download
+function dlStmt(){
+  var pu=document.getElementById('spu').value,fr=document.getElementById('sf').value,to=document.getElementById('st').value;
+  var title='Petty Cash TAJ — Statement'+(pu?' — '+pu:'')+(fr||to?' ('+(fr||'')+(fr&&to?' to ':'')+( to||'')+')':'');
   var content=document.getElementById('stmtb').innerHTML;
-  if(!content||!content.trim()){alert('No statement data to download.');return;}
-  var css='body{font-family:Arial,sans-serif;background:#fff;color:#111;margin:0;padding:24px;}'
-    +'h1{font-size:1.1rem;font-weight:700;margin-bottom:4px;}'
-    +'.sub{font-size:.78rem;color:#888;margin-bottom:20px;}'
-    +'.stc{border:1px solid #ddd;border-radius:8px;margin-bottom:22px;overflow:hidden;page-break-inside:avoid;}'
-    +'.sth{background:#f5f5f5;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ddd;}'
-    +'.sth-left{display:flex;align-items:center;gap:10px;}'
-    +'.sth-avatar{width:32px;height:32px;border-radius:50%;background:#e0e0e0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem;color:#333;}'
-    +'.sth-name{font-size:.9rem;font-weight:700;}'
-    +'.sth-meta{font-size:.65rem;color:#888;margin-top:2px;}'
-    +'.sth-bal{text-align:right;}'
-    +'.sth-bal-lbl{font-size:.58rem;color:#888;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;}'
-    +'.sth-bal-val{font-size:.9rem;font-weight:700;}'
-    +'.gp{color:#1a7a32!important;}.rp{color:#c0392b!important;}'
-    +'.stbl{width:100%;border-collapse:collapse;}'
-    +'.stbl th{text-align:left;padding:8px 12px;font-size:.6rem;text-transform:uppercase;letter-spacing:1px;color:#888;background:#fafafa;border-bottom:1px solid #ddd;}'
-    +'.stbl th.r{text-align:right;}'
-    +'.stbl td{padding:8px 12px;font-size:.82rem;border-bottom:1px solid #f0f0f0;}'
-    +'.stbl td.r{text-align:right;font-weight:600;}'
-    +'.stbl tr:last-child td{border-bottom:none;}'
-    +'.td-date{font-size:.7rem;color:#888;}'
-    +'.td-cat{font-size:.6rem;background:#f0f0f0;border:1px solid #ddd;color:#666;padding:1px 5px;border-radius:3px;}'
-    +'.td-inc{color:#1a7a32!important;}.td-exp{color:#c0392b!important;}'
-    +'.td-bal-pos{color:#1a7a32!important;}.td-bal-neg{color:#c0392b!important;}'
-    +'.fr-row td{border-top:2px solid #ddd;font-weight:700;background:#fafafa;}'
-    +'@media print{body{padding:12px;}@page{margin:15mm;}}';
-  var date=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+  if(!content||!content.trim()){alert('No data to download.');return;}
+  var css='body{font-family:Arial,sans-serif;background:#fff;color:#111;margin:0;padding:24px;}h1{font-size:1.1rem;font-weight:700;margin-bottom:4px;}.sub{font-size:.78rem;color:#888;margin-bottom:20px;}.stc{border:1px solid #ddd;border-radius:8px;margin-bottom:22px;overflow:hidden;page-break-inside:avoid;}.sth{background:#f5f5f5;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ddd;}.sth-left{display:flex;align-items:center;gap:10px;}.sth-avatar{width:32px;height:32px;border-radius:50%;background:#e0e0e0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem;color:#333;}.sth-name{font-size:.9rem;font-weight:700;}.sth-meta{font-size:.65rem;color:#888;}.sth-bal{text-align:right;}.sth-bal-lbl{font-size:.58rem;color:#888;text-transform:uppercase;}.sth-bal-val{font-size:.9rem;font-weight:700;}.gp{color:#1a7a32!important;}.rp{color:#c0392b!important;}.stbl{width:100%;border-collapse:collapse;}.stbl th{text-align:left;padding:8px 12px;font-size:.6rem;text-transform:uppercase;color:#888;background:#fafafa;border-bottom:1px solid #ddd;}.stbl th.r{text-align:right;}.stbl td{padding:8px 12px;font-size:.82rem;border-bottom:1px solid #f0f0f0;}.stbl td.r{text-align:right;font-weight:600;}.td-date{font-size:.7rem;color:#888;}.td-cat{font-size:.6rem;background:#f0f0f0;border:1px solid #ddd;color:#666;padding:1px 5px;border-radius:3px;}.td-inc{color:#1a7a32!important;}.td-exp{color:#c0392b!important;}.td-bal-pos{color:#1a7a32!important;}.td-bal-neg{color:#c0392b!important;}.fr-row td{border-top:2px solid #ddd;font-weight:700;background:#fafafa;}@media print{@page{margin:15mm;}}';
   var win=window.open('','_blank');
   if(!win){alert('Allow popups to download.');return;}
-  win.document.open();
-  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>');
-  win.document.write(title);
-  win.document.write('<\/title><style>');
-  win.document.write(css);
-  win.document.write('<\/style><\/head><body><h1>');
-  win.document.write(title);
-  win.document.write('<\/h1><div class="sub">Generated: ');
-  win.document.write(date);
-  win.document.write('<\/div>');
-  win.document.write(content);
-  win.document.write('<\/body><\/html>');
-  win.document.close();
-  setTimeout(function(){win.print();},600);
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>'+title+'</title><style>'+css+'</style></head><body><h1>'+title+'</h1><div class="sub">Generated: '+new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})+'</div>'+content+'</body></html>');
+  win.document.close();setTimeout(function(){win.print();},600);
 }
 
-// ── Master render ─────────────────────────────────────────────
+// Master render
 function render(){
   dStats();
   if(TAB==='tot')dTots();
@@ -744,33 +887,22 @@ function render(){
   else if(TAB==='stmt')dStmt();
   else dTable();
 }
+window.render=render;
 
-// ── Init: wire all events after DOM ready ────────────────────
-window.addEventListener('load',function(){
-  var d=new Date(),pad=function(n){return n<10?'0'+n:''+n;};
-  var today=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
-  document.getElementById('ed').value=today;
-  document.getElementById('ind').value=today;
-  // Login
-  document.getElementById('lbtn').addEventListener('click',doLogin);
-  document.getElementById('lu').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
-  document.getElementById('lp').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
-  // Modal
-  document.getElementById('btn-save').addEventListener('click',svEdit);
-  document.getElementById('btn-cancel').addEventListener('click',function(){document.getElementById('modal').classList.remove('open');});
-  // Statement filters
-  document.getElementById('btn-clr').addEventListener('click',function(){
-    document.getElementById('sf').value='';
-    document.getElementById('st').value='';
-    document.getElementById('spu').value='';
-    dStmt();
-  });
-  document.getElementById('btn-pdf').addEventListener('click',dlStmt);
-  // Init
-  rebuildECat();
-  rebuildICat();
-  render();
+// Init
+var d=new Date(),pad=function(n){return n<10?'0'+n:''+n;};
+var today=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+document.getElementById('ed').value=today;
+document.getElementById('ind').value=today;
+document.getElementById('btn-save').addEventListener('click',svEdit);
+document.getElementById('btn-cancel').addEventListener('click',function(){document.getElementById('modal').classList.remove('open');});
+document.getElementById('btn-clr').addEventListener('click',function(){
+  document.getElementById('sf').value='';document.getElementById('st').value='';document.getElementById('spu').value='';dStmt();
 });
+document.getElementById('btn-pdf').addEventListener('click',dlStmt);
+document.getElementById('btn-xl').addEventListener('click',exportStmtExcel);
+rebuildECat();rebuildICat();
+
 </script>
 </body>
 </html>
