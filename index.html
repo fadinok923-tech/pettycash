@@ -30,7 +30,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
 /* ── Login ── */
 #lw{position:fixed;inset:0;background:linear-gradient(135deg,#f0fdf4 0%,#ffffff 50%,#f0fdf4 100%);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;overflow:hidden;}
-#lw-canvas{position:absolute;inset:0;pointer-events:none;z-index:0;}
+#lw-canvas{position:absolute;inset:0;pointer-events:none;z-index:0;display:block;}
 #lw-glow1{position:absolute;top:80px;left:80px;width:350px;height:350px;background:radial-gradient(circle,rgba(34,197,94,.15),transparent 70%);border-radius:50%;filter:blur(50px);animation:lfloat 8s ease-in-out infinite;pointer-events:none;will-change:transform;}
 #lw-glow2{position:absolute;bottom:80px;right:80px;width:420px;height:420px;background:radial-gradient(circle,rgba(16,185,129,.12),transparent 70%);border-radius:50%;filter:blur(50px);animation:lfloat 8s ease-in-out infinite 4s;pointer-events:none;will-change:transform;}
 #lw-glow3{position:absolute;top:50%;left:50%;width:500px;height:500px;margin:-250px 0 0 -250px;background:radial-gradient(circle,rgba(74,222,128,.08),transparent 60%);border-radius:50%;filter:blur(60px);animation:lpulse 4s ease-in-out infinite;pointer-events:none;}
@@ -59,12 +59,14 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .leye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#9ca3af;padding:4px;transition:color .2s;display:flex;align-items:center;}
 .leye:hover{color:#22c55e;}
 .leye svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;}
-.lbtn{width:100%;background:linear-gradient(135deg,#22c55e,#10b981);color:#fff;border:none;border-radius:12px;padding:14px;font-size:.92rem;font-weight:700;cursor:pointer;margin-top:8px;font-family:'DM Sans',sans-serif;letter-spacing:.3px;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:8px;animation:lfadeinup .6s ease-out .3s both;box-shadow:0 4px 15px rgba(34,197,94,.3);}
-.lbtn:hover{background:linear-gradient(135deg,#16a34a,#059669);transform:scale(1.02);box-shadow:0 8px 30px rgba(34,197,94,.4);}
-.lbtn:active{transform:scale(.98);}
+.lbtn{width:100%;position:relative;display:flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:999px;padding:14px;font-size:.92rem;font-weight:700;cursor:pointer;margin-top:8px;font-family:'DM Sans',sans-serif;letter-spacing:.3px;color:#fff;isolation:isolate;overflow:hidden;transition:transform .25s cubic-bezier(.1,.4,.2,1),filter .2s;animation:lfadeinup .6s ease-out .3s both;}
+.lbtn::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,#22c55e,#16a34a,#4ade80,#15803d);z-index:-2;}
+.lbtn::after{content:'';position:absolute;inset:1.5px;border-radius:inherit;background:linear-gradient(160deg,rgba(255,255,255,.28) 0%,rgba(34,197,94,.55) 35%,rgba(22,163,74,.65) 65%,rgba(16,130,55,.5) 100%);box-shadow:inset 3px 3px 0.5px -3px rgba(0,0,0,.9),inset -3px -3px 0.5px -3px rgba(0,0,0,.85),inset 1px 1px 1px -.5px rgba(0,0,0,.6),inset -1px -1px 1px -.5px rgba(0,0,0,.6),inset 0 0 6px 6px rgba(0,0,0,.08),0 0 12px rgba(255,255,255,.12);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);z-index:-1;transition:filter .2s;}
+.lbtn:hover{transform:scale(1.02);filter:brightness(1.1);box-shadow:0 8px 30px rgba(34,197,94,.4);}
+.lbtn:active{transform:scale(.98);filter:brightness(.95);}
 .lbtn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
 .lbtn .lspinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:lspin .7s linear infinite;}
-.lbtn svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2;transition:transform .3s;}
+.lbtn svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2;transition:transform .3s;position:relative;z-index:1;}
 .lbtn:hover svg{transform:translateX(4px);}
 .lerr{color:#ef4444;font-size:.8rem;margin-top:10px;min-height:18px;}
 .lfoot{margin-top:20px;color:#9ca3af;font-size:.75rem;}
@@ -112,8 +114,11 @@ header{background:rgba(255,255,255,.95);backdrop-filter:blur(20px);border-bottom
 .main{padding:20px 20px;max-width:1280px;margin:0 auto;}
 
 /* ── Cards ── */
-.card{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:22px;margin-bottom:18px;position:relative;overflow:hidden;}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(22,163,74,.2),transparent);}
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:22px;margin-bottom:18px;position:relative;overflow:visible;
+  --glow-border: 2px;
+  --glow-spread: 40deg;
+}
+.card-topline{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(22,163,74,.2),transparent);}
 .ctitle{font-size:.92rem;margin-bottom:16px;color:var(--ac);font-family:'DM Serif Display',serif;letter-spacing:.3px;display:flex;align-items:center;gap:8px;}
 .ctitle.g{color:var(--gr);}
 .ctitle::before{content:'';width:3px;height:16px;border-radius:2px;background:currentColor;display:inline-block;}
@@ -128,38 +133,353 @@ input:focus,select:focus{border-color:var(--ac);background:var(--s3);}
 input[type=date]::-webkit-calendar-picker-indicator{filter:none;opacity:.6;}
 select option{background:#ffffff;}
 
+/* ── Liquid Glass Buttons ── */
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+
+/* Shared liquid glass base */
+.bny, .bng {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 24px;
+  font-size: .84rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: .3px;
+  color: #fff;
+  isolation: isolate;
+  overflow: hidden;
+  transition: transform .25s cubic-bezier(.1,.4,.2,1), filter .2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.bny { background: transparent; }
+.bng { background: transparent; }
+
+/* Outer glow ring */
+.bny::before, .bng::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, #22c55e, #16a34a, #4ade80, #15803d);
+  z-index: -2;
+  transition: filter .2s;
+}
+/* Glass inner layer */
+.bny::after, .bng::after {
+  content: '';
+  position: absolute;
+  inset: 1.5px;
+  border-radius: inherit;
+  background: linear-gradient(160deg,
+    rgba(255,255,255,.28) 0%,
+    rgba(34,197,94,.55) 35%,
+    rgba(22,163,74,.65) 65%,
+    rgba(16,130,55,.5) 100%
+  );
+  box-shadow:
+    inset 3px 3px 0.5px -3px rgba(0,0,0,.9),
+    inset -3px -3px 0.5px -3px rgba(0,0,0,.85),
+    inset 1px 1px 1px -.5px rgba(0,0,0,.6),
+    inset -1px -1px 1px -.5px rgba(0,0,0,.6),
+    inset 0 0 6px 6px rgba(0,0,0,.08),
+    inset 0 0 2px 2px rgba(0,0,0,.05),
+    0 0 12px rgba(255,255,255,.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: -1;
+  transition: filter .2s;
+}
+
+.bny:hover, .bng:hover {
+  transform: scale(1.04);
+  filter: brightness(1.1);
+}
+.bny:active, .bng:active {
+  transform: scale(.97) translateY(1px);
+  filter: brightness(.95);
+}
+.bny:disabled { opacity:.65; cursor:not-allowed; transform:none; }
+
+/* Text content sits above pseudo layers */
+.bny > *:not(.btn-shine), .bng > *:not(.btn-shine),
+.bny > span.btn-spinner, .bng > span.btn-spinner {
+  position: relative;
+  z-index: 1;
+}
+
+/* Shimmer highlight on hover */
+.bny .btn-shine, .bng .btn-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.18) 50%, transparent 60%);
+  background-size: 200% 100%;
+  background-position: 200% 0;
+  transition: background-position .4s ease;
+  pointer-events: none;
+}
+.bny:hover .btn-shine, .bng:hover .btn-shine {
+  background-position: -200% 0;
+}
+
+/* ══════════════════════════════════════════
+   ANIMATED DROPDOWN (select replacement)
+══════════════════════════════════════════ */
+.add-wrap { position:relative; width:100%; }
+.add-trigger {
+  width:100%; display:flex; align-items:center; justify-content:space-between;
+  background:var(--s2); border:1px solid var(--bd); border-radius:9px;
+  color:var(--tx); font-size:.84rem; padding:9px 12px;
+  font-family:'DM Sans',sans-serif; cursor:pointer;
+  transition:border-color .2s, background .2s, box-shadow .2s;
+  outline:none; gap:6px;
+}
+.add-trigger:focus, .add-trigger.open {
+  border-color:var(--ac); background:var(--s3);
+  box-shadow:0 0 0 3px rgba(22,163,74,.1);
+}
+.add-trigger-txt { flex:1; text-align:left; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.add-chevron { width:16px; height:16px; stroke:var(--mu); fill:none; stroke-width:2; flex-shrink:0;
+  transition:transform .22s cubic-bezier(.4,0,.2,1); }
+.add-trigger.open .add-chevron { transform:rotate(180deg); }
+
+.add-menu {
+  position:absolute; top:calc(100% + 6px); left:50%; z-index:9999;
+  min-width:100%; width:max-content; max-width:280px;
+  transform:translateX(-50%) translateY(-6px) scale(.97);
+  opacity:0; pointer-events:none;
+  background:var(--s1); border:1.5px solid var(--bd);
+  border-radius:12px;
+  box-shadow:0 10px 36px rgba(0,0,0,.13), 0 2px 8px rgba(0,0,0,.07);
+  transition:opacity .2s cubic-bezier(.4,0,.2,1),
+             transform .2s cubic-bezier(.4,0,.2,1);
+  overflow:hidden;
+  display:flex; flex-direction:column;
+}
+.add-menu.open {
+  opacity:1; pointer-events:auto;
+  transform:translateX(-50%) translateY(0) scale(1);
+}
+
+/* Scrollable item list inside the menu */
+.add-menu-list {
+  overflow-y:auto;
+  max-height:270px;
+  overscroll-behavior:contain;
+}
+/* Custom scrollbar — thin green thumb */
+.add-menu-list::-webkit-scrollbar { width:5px; }
+.add-menu-list::-webkit-scrollbar-track { background:transparent; border-radius:99px; }
+.add-menu-list::-webkit-scrollbar-thumb {
+  background:rgba(22,163,74,.35); border-radius:99px;
+  transition:background .2s;
+}
+.add-menu-list::-webkit-scrollbar-thumb:hover { background:rgba(22,163,74,.65); }
+.add-menu-list { scrollbar-width:thin; scrollbar-color:rgba(22,163,74,.35) transparent; }
+
+.add-item {
+  display:block; width:100%; padding:9px 14px;
+  font-size:.82rem; color:var(--tx); text-decoration:none;
+  background:var(--s1); border:none; border-bottom:1px solid rgba(0,0,0,.045);
+  cursor:pointer; font-family:'DM Sans',sans-serif;
+  text-align:left; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  transition:background .1s, color .1s, padding-left .1s;
+  opacity:0; transform:translateX(-10px);
+  animation:none;
+  box-sizing:border-box;
+}
+.add-item:last-child { border-bottom:none; }
+.add-item:hover {
+  background:rgba(22,163,74,.07);
+  color:var(--ac);
+  padding-left:18px;
+}
+.add-item:active { background:rgba(22,163,74,.14); }
+.add-item.selected {
+  color:var(--ac); font-weight:600;
+  background:rgba(22,163,74,.06);
+}
+.add-menu.open .add-item { animation:addItemIn .2s forwards; }
+@keyframes addItemIn {
+  to { opacity:1; transform:translateX(0); }
+}
+.add-menu.open .add-item:nth-child(1){animation-delay:.02s}
+.add-menu.open .add-item:nth-child(2){animation-delay:.04s}
+.add-menu.open .add-item:nth-child(3){animation-delay:.06s}
+.add-menu.open .add-item:nth-child(4){animation-delay:.08s}
+.add-menu.open .add-item:nth-child(5){animation-delay:.10s}
+.add-menu.open .add-item:nth-child(6){animation-delay:.12s}
+.add-menu.open .add-item:nth-child(7){animation-delay:.14s}
+.add-menu.open .add-item:nth-child(n+8){animation-delay:.15s}
+
+/* Category search bar */
+.add-search-wrap {
+  display:flex; align-items:center; gap:7px;
+  padding:8px 12px 7px; border-bottom:1px solid var(--bd);
+  background:var(--s2); position:sticky; top:0; z-index:2;
+}
+.add-search-icon {
+  width:14px; height:14px; stroke:var(--mu); fill:none; stroke-width:2; flex-shrink:0;
+}
+.add-search-inp {
+  flex:1; border:none; background:transparent; color:var(--tx);
+  font-size:.82rem; font-family:'DM Sans',sans-serif; outline:none; padding:0;
+}
+.add-search-inp::placeholder { color:var(--mu); }
+.add-item.hidden { display:none !important; }
+
+
+/* ══════════════════════════════════════════
+   INTERACTIVE HOVER BUTTON (add buttons)
+══════════════════════════════════════════ */
+.ihb {
+  position:relative; display:inline-flex; align-items:center;
+  justify-content:center; overflow:hidden;
+  border-radius:999px; border:none;
+  padding:10px 24px; min-width:140px;
+  font-size:.84rem; font-weight:700; cursor:pointer;
+  font-family:'DM Sans',sans-serif; letter-spacing:.3px;
+  color:#fff; isolation:isolate;
+  transition:transform .25s cubic-bezier(.1,.4,.2,1), filter .2s, min-width .3s cubic-bezier(.1,.4,.2,1);
+}
+.ihb::before {
+  content:''; position:absolute; inset:0; border-radius:inherit;
+  background:linear-gradient(135deg,#22c55e,#16a34a,#4ade80,#15803d); z-index:-2;
+}
+.ihb::after {
+  content:''; position:absolute; inset:1.5px; border-radius:inherit;
+  background:linear-gradient(160deg,rgba(255,255,255,.28) 0%,rgba(34,197,94,.55) 35%,rgba(22,163,74,.65) 65%,rgba(16,130,55,.5) 100%);
+  box-shadow:inset 3px 3px .5px -3px rgba(0,0,0,.9),inset -3px -3px .5px -3px rgba(0,0,0,.85),
+    inset 0 0 6px 6px rgba(0,0,0,.08),0 0 12px rgba(255,255,255,.12);
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); z-index:-1;
+}
+.ihb:hover { transform:scale(1.04); filter:brightness(1.08); }
+.ihb:active { transform:scale(.97) translateY(1px); filter:brightness(.95); }
+.ihb:disabled { opacity:.65; cursor:not-allowed; transform:none; }
+
+/* Dot that expands on hover */
+.ihb-dot {
+  position:absolute; left:16px; top:50%; transform:translateY(-50%);
+  width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.5);
+  transition:transform .5s ease, opacity .3s;
+  z-index:1;
+}
+.ihb:hover .ihb-dot, .ihb.loading .ihb-dot { transform:translateY(-50%) scale(40); opacity:.15; }
+
+/* Static label (slides out on hover) */
+.ihb-label {
+  position:relative; z-index:2;
+  transition:transform .4s ease, opacity .35s ease;
+  display:flex; align-items:center; gap:6px;
+}
+.ihb:hover .ihb-label, .ihb.loading .ihb-label, .ihb.done .ihb-label {
+  transform:translateX(60px); opacity:0;
+}
+
+/* Overlay label (slides in on hover) */
+.ihb-hover {
+  position:absolute; inset:0; z-index:3;
+  display:flex; align-items:center; justify-content:center; gap:6px;
+  opacity:0; transform:translateX(-30px);
+  transition:transform .4s ease, opacity .35s ease;
+  font-weight:700; font-size:.84rem;
+}
+.ihb:hover .ihb-hover { opacity:1; transform:translateX(0); }
+.ihb.loading .ihb-hover, .ihb.done .ihb-hover { opacity:1; transform:translateX(0); }
+
+.ihb-arrow { width:15px; height:15px; stroke:#fff; fill:none; stroke-width:2.5; flex-shrink:0; }
+.ihb-check { width:15px; height:15px; stroke:#fff; fill:none; stroke-width:2.5; flex-shrink:0; }
+.ihb-spin {
+  width:15px; height:15px; border:2px solid rgba(255,255,255,.3);
+  border-top-color:#fff; border-radius:50%;
+  animation:ihb-spinner .6s linear infinite; flex-shrink:0;
+}
+@keyframes ihb-spinner { to { transform:rotate(360deg); } }
+
+
 /* ── FEATURE 3: Quick amount buttons ── */
 .quick-amounts{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;}
 .qa-btn{background:var(--s2);border:1px solid var(--bd);border-radius:6px;color:var(--mu2);font-size:.66rem;font-weight:600;padding:4px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .18s;letter-spacing:.2px;}
 .qa-btn:hover{background:var(--s3);border-color:var(--ac);color:var(--ac);}
 .qa-btn:active{transform:scale(.94);}
 
-.btn-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
-.bny{background:var(--ac);color:#fff;border:none;border-radius:9px;padding:10px 22px;font-size:.84rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s,transform .1s,box-shadow .2s;letter-spacing:.2px;position:relative;overflow:hidden;}
-.bny:hover{background:var(--ac2);box-shadow:0 4px 14px rgba(22,163,74,.35);}
-.bny:active{transform:scale(.97);}
-.bny:disabled{opacity:.65;cursor:not-allowed;transform:none;}
-/* Button ripple */
-.bny::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0);transition:background .15s;}
-.bny:active::after{background:rgba(255,255,255,.15);}
-.bng{background:var(--gr);color:#fff;border:none;border-radius:9px;padding:10px 22px;font-size:.84rem;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s,box-shadow .2s;letter-spacing:.2px;}
-.bng:hover{background:#3ecf70;box-shadow:0 4px 14px rgba(22,163,74,.35);}
 .btn-xl{background:var(--s2);color:var(--gr);border:1px solid rgba(74,222,128,.3);border-radius:9px;padding:10px 18px;font-size:.78rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;letter-spacing:.2px;}
 .btn-xl:hover{background:rgba(74,222,128,.1);border-color:var(--gr);}
+
+/* ── Glow Effect (GlowingEffect port) ── */
+@property --glow-angle { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+@property --glow-active { syntax: '<number>'; inherits: false; initial-value: 0; }
+
+.sc, .card {
+  position: relative;
+}
+.sc::before, .card::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--glow-border, 1.5px));
+  border-radius: inherit;
+  border: var(--glow-border, 1.5px) solid transparent;
+  background:
+    radial-gradient(circle, #22c55e 10%, #22c55e00 20%),
+    radial-gradient(circle at 40% 40%, #16a34a 5%, #16a34a00 15%),
+    radial-gradient(circle at 60% 60%, #4ade80 10%, #4ade8000 20%),
+    radial-gradient(circle at 40% 60%, #15803d 10%, #15803d00 20%),
+    repeating-conic-gradient(
+      from var(--glow-angle) at 50% 50%,
+      #22c55e 0%,
+      #16a34a 5%,
+      #4ade80 10%,
+      #15803d 15%,
+      #22c55e 20%
+    );
+  background-attachment: fixed;
+  -webkit-mask:
+    linear-gradient(#0000, #0000),
+    conic-gradient(
+      from calc(var(--glow-angle) - var(--glow-spread, 30deg)),
+      #00000000 0deg,
+      #fff,
+      #00000000 calc(var(--glow-spread, 30deg) * 2)
+    );
+  -webkit-mask-clip: padding-box, border-box;
+  -webkit-mask-composite: destination-in;
+  mask:
+    linear-gradient(#0000, #0000),
+    conic-gradient(
+      from calc(var(--glow-angle) - var(--glow-spread, 30deg)),
+      #00000000 0deg,
+      #fff,
+      #00000000 calc(var(--glow-spread, 30deg) * 2)
+    );
+  mask-clip: padding-box, border-box;
+  mask-composite: intersect;
+  opacity: var(--glow-active, 0);
+  transition: opacity .3s;
+  pointer-events: none;
+  z-index: 0;
+}
 
 /* ── Stat cards with lift hover ── */
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:18px;}
 @media(max-width:500px){.stats{grid-template-columns:repeat(2,1fr);}}
-.sc{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;position:relative;overflow:hidden;
+.sc{background:var(--s1);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;position:relative;overflow:visible;
   transition:border-color .25s, transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s;
   cursor:default;
+  --glow-border: 2px;
+  --glow-spread: 40deg;
 }
 .sc:hover{
   border-color:var(--bd2);
   transform:translateY(-4px);
   box-shadow:0 8px 24px rgba(0,0,0,.1);
 }
-.sc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(22,163,74,.15),transparent);}
+.sc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(22,163,74,.15),transparent);border-radius:0 0 12px 12px;}
 .scl{font-size:.58rem;color:var(--mu);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;font-weight:600;}
 .scv{font-size:.94rem;font-weight:700;line-height:1.2;transition:color .3s;}
 .scs{font-size:.62rem;color:var(--mu);margin-top:4px;}
@@ -168,6 +488,47 @@ select option{background:#ffffff;}
 .ap{color:var(--ac)!important;}
 
 /* ── Toolbar ── */
+
+/* ── Transaction search bar ── */
+.txn-search-wrap {
+  display:flex; align-items:center; gap:0;
+  background:#fff; border:1.5px solid var(--bd);
+  border-radius:10px; overflow:hidden;
+  transition:border-color .2s, box-shadow .2s;
+  width:220px; flex-shrink:0;
+}
+.txn-search-wrap:focus-within {
+  border-color:var(--ac);
+  box-shadow:0 0 0 3px rgba(22,163,74,.1);
+}
+.txn-search-icon-wrap {
+  display:flex; align-items:center; padding:0 10px;
+  color:var(--mu); pointer-events:none;
+}
+.txn-search-icon-wrap svg {
+  width:15px; height:15px; stroke:currentColor; fill:none;
+  stroke-width:2; stroke-linecap:round; stroke-linejoin:round;
+  transition:stroke .2s;
+}
+.txn-search-wrap:focus-within .txn-search-icon-wrap svg { stroke:var(--ac); }
+#txn-search {
+  flex:1; border:none; background:transparent; outline:none;
+  font-size:.8rem; font-family:'DM Sans',sans-serif;
+  color:var(--tx); padding:8px 10px 8px 0;
+}
+#txn-search::placeholder { color:var(--mu); }
+.txn-section-header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:10px; flex-wrap:wrap; gap:8px;
+}
+.txn-section-title {
+  font-size:.68rem; text-transform:uppercase; letter-spacing:1.5px;
+  color:var(--mu2); font-weight:700;
+}
+@media(max-width:500px){
+  .txn-search-wrap { width:100%; }
+  .txn-section-header { flex-direction:column; align-items:flex-start; }
+}
 .toolbar{display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap;}
 .toolbar input,.toolbar select{width:auto;font-size:.76rem;padding:7px 10px;}
 .cbn{margin-left:auto;background:var(--s2);border:1px solid var(--bd);border-radius:20px;padding:3px 12px;font-size:.66rem;color:var(--mu2);font-weight:600;}
@@ -342,8 +703,8 @@ tr{transition:background .15s;}
       </div>
     </div>
     <button class="lbtn" id="lbtn">
-      <span id="lbtn-txt">Sign In</span>
-      <svg id="lbtn-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      <span id="lbtn-txt" style="position:relative;z-index:1">Sign In</span>
+      <svg id="lbtn-arrow" viewBox="0 0 24 24" style="position:relative;z-index:1"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </button>
     <div class="lerr" id="lerr"></div>
     <div class="lfoot">Secure access to your expense management system</div>
@@ -401,7 +762,10 @@ tr{transition:background .15s;}
 <div class="card" id="exp-form">
   <div class="ctitle">Add Expense</div>
   <div class="fg">
-    <div><label>Date</label><input type="date" id="ed"/></div>
+    <div>
+      <label>Date</label>
+      <input type="date" id="ed"/>
+    </div>
     <div><label>Description (optional)</label><input type="text" id="edsc" placeholder="e.g. Food"/></div>
     <div>
       <label>Amount SAR</label>
@@ -414,23 +778,51 @@ tr{transition:background .15s;}
         <button class="qa-btn" onclick="addQA('eamt',1000)">+1K</button>
       </div>
     </div>
-    <div><label>Paid By</label>
-      <select id="epd">
-        <option value="">- Select -</option>
-        <option>Ansar Babu</option><option>Ubaid</option><option>Hassan</option><option>Ayaz</option>
-      </select>
+    <div>
+      <label>Paid By</label>
+      <div class="add-wrap" id="epd-wrap">
+        <button class="add-trigger" id="epd-trigger" type="button" onclick="toggleDD('epd')">
+          <span class="add-trigger-txt" id="epd-display">- Select -</span>
+          <svg class="add-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="add-menu" id="epd-menu">
+          <div class="add-menu-list">
+            <button class="add-item" onclick="pickDD('epd','Ansar Babu')">Ansar Babu</button>
+            <button class="add-item" onclick="pickDD('epd','Ubaid')">Ubaid</button>
+            <button class="add-item" onclick="pickDD('epd','Hassan')">Hassan</button>
+            <button class="add-item" onclick="pickDD('epd','Ayaz')">Ayaz</button>
+          </div>
+        </div>
+        <input type="hidden" id="epd"/>
+      </div>
     </div>
-    <div><label>Category</label>
-      <select id="ecat" onchange="onEC()">
-        <option value="">- Select -</option>
-        <option>Machine Maintenance - Oil</option><option>Other</option>
-        <option value="NEW_EXP">+ Add new...</option>
-      </select>
+    <div>
+      <label>Category</label>
+      <div class="add-wrap" id="ecat-wrap">
+        <button class="add-trigger" id="ecat-trigger" type="button" onclick="toggleDD('ecat')">
+          <span class="add-trigger-txt" id="ecat-display">- Select -</span>
+          <svg class="add-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="add-menu" id="ecat-menu">
+          <div class="add-search-wrap">
+            <svg class="add-search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="add-search-inp" id="ecat-search" type="text" placeholder="Search category…" oninput="filterDD('ecat')" autocomplete="off"/>
+          </div>
+        </div>
+        <input type="hidden" id="ecat"/>
+      </div>
       <input type="text" id="ecn" placeholder="New category name" style="display:none;margin-top:7px"/>
     </div>
   </div>
   <div class="btn-row">
-    <button class="bny" id="btn-add-exp" onclick="addExp()">+ Add Expense</button>
+    <button class="ihb" id="btn-add-exp" onclick="addExp()">
+      <span class="ihb-dot"></span>
+      <span class="ihb-label">+ Add Expense</span>
+      <span class="ihb-hover">
+        <svg class="ihb-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        Add Expense
+      </span>
+    </button>
   </div>
 </div>
 
@@ -438,7 +830,10 @@ tr{transition:background .15s;}
 <div class="card" id="inc-form" style="display:none">
   <div class="ctitle g">Add Income</div>
   <div class="fg">
-    <div><label>Date</label><input type="date" id="ind"/></div>
+    <div>
+      <label>Date</label>
+      <input type="date" id="ind"/>
+    </div>
     <div><label>Description (optional)</label><input type="text" id="indsc" placeholder="e.g. Sales"/></div>
     <div>
       <label>Amount SAR</label>
@@ -451,23 +846,52 @@ tr{transition:background .15s;}
         <button class="qa-btn" onclick="addQA('inamt',5000)">+5K</button>
       </div>
     </div>
-    <div><label>Received By</label>
-      <select id="inrv">
-        <option value="">- Select -</option>
-        <option>Ansar Babu</option><option>Ubaid</option><option>Hassan</option><option>Ayaz</option><option>Admin</option>
-      </select>
+    <div>
+      <label>Received By</label>
+      <div class="add-wrap" id="inrv-wrap">
+        <button class="add-trigger" id="inrv-trigger" type="button" onclick="toggleDD('inrv')">
+          <span class="add-trigger-txt" id="inrv-display">- Select -</span>
+          <svg class="add-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="add-menu" id="inrv-menu">
+          <div class="add-menu-list">
+            <button class="add-item" onclick="pickDD('inrv','Ansar Babu')">Ansar Babu</button>
+            <button class="add-item" onclick="pickDD('inrv','Ubaid')">Ubaid</button>
+            <button class="add-item" onclick="pickDD('inrv','Hassan')">Hassan</button>
+            <button class="add-item" onclick="pickDD('inrv','Ayaz')">Ayaz</button>
+            <button class="add-item" onclick="pickDD('inrv','Admin')">Admin</button>
+          </div>
+        </div>
+        <input type="hidden" id="inrv"/>
+      </div>
     </div>
-    <div><label>Source</label>
-      <select id="icat" onchange="onIC()">
-        <option value="">- Select -</option>
-        <option>Cash Received</option>
-        <option value="NEW_INC">+ Add new...</option>
-      </select>
+    <div>
+      <label>Source</label>
+      <div class="add-wrap" id="icat-wrap">
+        <button class="add-trigger" id="icat-trigger" type="button" onclick="toggleDD('icat')">
+          <span class="add-trigger-txt" id="icat-display">- Select -</span>
+          <svg class="add-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="add-menu" id="icat-menu">
+          <div class="add-search-wrap">
+            <svg class="add-search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="add-search-inp" id="icat-search" type="text" placeholder="Search source…" oninput="filterDD('icat')" autocomplete="off"/>
+          </div>
+        </div>
+        <input type="hidden" id="icat"/>
+      </div>
       <input type="text" id="icn" placeholder="New source name" style="display:none;margin-top:7px"/>
     </div>
   </div>
   <div class="btn-row">
-    <button class="bng" id="btn-add-inc" onclick="addInc()">+ Add Income</button>
+    <button class="ihb" id="btn-add-inc" onclick="addInc()">
+      <span class="ihb-dot"></span>
+      <span class="ihb-label">+ Add Income</span>
+      <span class="ihb-hover">
+        <svg class="ihb-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        Add Income
+      </span>
+    </button>
   </div>
 </div>
 
@@ -497,6 +921,15 @@ tr{transition:background .15s;}
 
 <!-- Table -->
 <div id="tv">
+  <div class="txn-section-header">
+    <span class="txn-section-title">Recent Transactions</span>
+    <div class="txn-search-wrap">
+      <div class="txn-search-icon-wrap">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+      <input id="txn-search" type="text" placeholder="Search transactions…" autocomplete="off" oninput="filterTxnTable(this.value)"/>
+    </div>
+  </div>
   <div class="tw"><div class="tw-scroll"><table>
     <thead><tr>
       <th onclick="srt('dt')">Date ↕</th>
@@ -688,10 +1121,13 @@ function doLogin(){
       var sb=document.getElementById('sync-bar');
       if(sb){ sb.classList.add('show'); }
       runStaggeredEntrance();
-      var sel=document.getElementById('epd');
-      if(sel){for(var i=0;i<sel.options.length;i++)if(sel.options[i].value===u){sel.value=u;break;}}
-      var sel2=document.getElementById('inrv');
-      if(sel2){for(var i=0;i<sel2.options.length;i++)if(sel2.options[i].value===u){sel2.value=u;break;}}
+      // Pre-select the logged-in user in both dropdowns
+      if(u && u!=='Admin'){
+        if(typeof pickDD==='function'){
+          pickDD('epd', u);
+          pickDD('inrv', u);
+        }
+      }
     }, 400);
   }, 600);
 }
@@ -773,35 +1209,89 @@ seedIfEmpty();
 
 // Category dropdowns
 function rebuildECat(){
-  var sel=document.getElementById('ecat'),cur=sel.value;
-  while(sel.options.length)sel.remove(0);
-  [''].concat(BASE_E).concat(ECAT).concat(['NEW_EXP']).forEach(function(v){
-    sel.add(new Option(v===''?'- Select -':v==='NEW_EXP'?'+ Add new...':v,v));
-  });
-  if(cur)sel.value=cur;
-  var fc=document.getElementById('fc'),fv=fc.value;
-  while(fc.options.length)fc.remove(0);
-  [''].concat(BASE_E).concat(ECAT).forEach(function(v){fc.add(new Option(v===''?'All Categories':v,v));});
-  if(fv)fc.value=fv;
+  var cats = [''].concat(BASE_E).concat(ECAT).concat(['NEW_EXP']);
+  var menu = document.getElementById('ecat-menu');
+  if(menu){
+    // Preserve search bar (first child), replace list
+    var searchWrap = menu.querySelector('.add-search-wrap');
+    menu.innerHTML = '';
+    if(searchWrap) menu.appendChild(searchWrap);
+    var list = document.createElement('div');
+    list.className = 'add-menu-list';
+    list.id = 'ecat-list';
+    cats.forEach(function(v){
+      if(v==='') return;
+      var btn = document.createElement('button');
+      btn.className = 'add-item' + (v==='NEW_EXP' ? ' add-item-special' : '');
+      btn.textContent = v==='NEW_EXP' ? '+ Add new...' : v;
+      btn.onclick = function(){ pickDD('ecat', v); };
+      list.appendChild(btn);
+    });
+    menu.appendChild(list);
+  }
+  // Also rebuild the filter toolbar dropdown
+  var fc=document.getElementById('fc'),fv=fc?fc.value:'';
+  if(fc){
+    while(fc.options.length)fc.remove(0);
+    [''].concat(BASE_E).concat(ECAT).forEach(function(v){fc.add(new Option(v===''?'All Categories':v,v));});
+    if(fv)fc.value=fv;
+  }
 }
 function rebuildICat(){
-  var sel=document.getElementById('icat'),cur=sel.value;
-  while(sel.options.length)sel.remove(0);
-  [''].concat(BASE_I).concat(ICAT).concat(['NEW_INC']).forEach(function(v){
-    sel.add(new Option(v===''?'- Select -':v==='NEW_INC'?'+ Add new...':v,v));
-  });
-  if(cur)sel.value=cur;
+  var cats = [''].concat(BASE_I).concat(ICAT).concat(['NEW_INC']);
+  var menu = document.getElementById('icat-menu');
+  if(menu){
+    var searchWrap = menu.querySelector('.add-search-wrap');
+    menu.innerHTML = '';
+    if(searchWrap) menu.appendChild(searchWrap);
+    var list = document.createElement('div');
+    list.className = 'add-menu-list';
+    list.id = 'icat-list';
+    cats.forEach(function(v){
+      if(v==='') return;
+      var btn = document.createElement('button');
+      btn.className = 'add-item' + (v==='NEW_INC' ? ' add-item-special' : '');
+      btn.textContent = v==='NEW_INC' ? '+ Add new...' : v;
+      btn.onclick = function(){ pickDD('icat', v); };
+      list.appendChild(btn);
+    });
+    menu.appendChild(list);
+  }
 }
-function onEC(){document.getElementById('ecn').style.display=document.getElementById('ecat').value==='NEW_EXP'?'block':'none';}
-function onIC(){document.getElementById('icn').style.display=document.getElementById('icat').value==='NEW_INC'?'block':'none';}
-function getEC(){var v=document.getElementById('ecat').value;return v==='NEW_EXP'?document.getElementById('ecn').value.trim():v;}
-function getIC(){var v=document.getElementById('icat').value;return v==='NEW_INC'?document.getElementById('icn').value.trim():v;}
+function onEC(){ /* handled by pickDD */ }
+function onIC(){ /* handled by pickDD */ }
+function getEC(){
+  var v=document.getElementById('ecat').value;
+  return v==='NEW_EXP'?document.getElementById('ecn').value.trim():v;
+}
+function getIC(){
+  var v=document.getElementById('icat').value;
+  return v==='NEW_INC'?document.getElementById('icn').value.trim():v;
+}
 window.onEC=onEC;window.onIC=onIC;
 
 // ─────────────────────────────────────────────
 // FEATURE 3: Add Expense — Loading state + animated row
 // ─────────────────────────────────────────────
 var lastAddedId = null;
+
+function ihbSetState(btn, state){
+  // state: 'idle'|'loading'|'done'
+  btn.classList.remove('loading','done');
+  if(state==='loading') btn.classList.add('loading');
+  if(state==='done')    btn.classList.add('done');
+  var hov = btn.querySelector('.ihb-hover');
+  if(!hov) return;
+  if(state==='loading'){
+    hov.innerHTML = '<span class="ihb-spin"></span><span>Adding...</span>';
+  } else if(state==='done'){
+    hov.innerHTML = '<svg class="ihb-check" viewBox="0 0 24 24"><polyline points="4 12 9 17 20 6"/></svg><span>Done!</span>';
+  } else {
+    // restore original label from data-hover attr
+    var label = btn.getAttribute('data-hover-label') || 'Submit';
+    hov.innerHTML = '<svg class="ihb-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>' + label;
+  }
+}
 
 async function addExp(){
   var dtRaw=document.getElementById('ed').value;
@@ -822,30 +1312,26 @@ async function addExp(){
   if(!ct){toast('Please select a Category','error');return;}
   if(!amRaw||isNaN(am)||am<=0){toast('Please enter a valid Amount','error');return;}
 
-  // Loading state on button
-  var btn = document.getElementById('btn-add-exp');
-  var origHTML = btn.innerHTML;
-  btn.innerHTML = '<span class="btn-spinner"></span> Adding...';
-  btn.disabled = true;
-
+  var btn=document.getElementById('btn-add-exp');
+  btn.disabled=true; ihbSetState(btn,'loading');
   try{
     if(BASE_E.indexOf(ct)<0&&ECAT.indexOf(ct)<0) await addDoc(catCol,{type:'exp',name:ct});
-    var docRef = await addDoc(expCol,{dt:dt,ds:ds,am:am,wh:wh,ct:ct,dn:false});
-    lastAddedId = docRef.id; // Track for row animation
+    var docRef=await addDoc(expCol,{dt:dt,ds:ds,am:am,wh:wh,ct:ct,dn:false});
+    lastAddedId=docRef.id;
 
     document.getElementById('edsc').value='';
     document.getElementById('eamt').value='';
-    document.getElementById('ecat').value='';
+    pickDD('ecat',''); pickDD('epd','');
     document.getElementById('ecn').value='';
     document.getElementById('ecn').style.display='none';
     document.getElementById('ed').value=todayStr();
+    ihbSetState(btn,'done');
     toast('Expense added successfully ✅','success');
+    setTimeout(function(){ ihbSetState(btn,'idle'); btn.disabled=false; },1800);
   }catch(err){
     console.error('addExp error:',err);
     toast('Save failed: '+err.message,'error');
-  }finally{
-    btn.innerHTML = origHTML;
-    btn.disabled = false;
+    ihbSetState(btn,'idle'); btn.disabled=false;
   }
 }
 
@@ -868,29 +1354,26 @@ async function addInc(){
   if(!ct){toast('Please select a Source','error');return;}
   if(!amRaw||isNaN(am)||am<=0){toast('Please enter a valid Amount','error');return;}
 
-  var btn = document.getElementById('btn-add-inc');
-  var origHTML = btn.innerHTML;
-  btn.innerHTML = '<span class="btn-spinner"></span> Adding...';
-  btn.disabled = true;
-
+  var btn=document.getElementById('btn-add-inc');
+  btn.disabled=true; ihbSetState(btn,'loading');
   try{
     if(BASE_I.indexOf(ct)<0&&ICAT.indexOf(ct)<0) await addDoc(catCol,{type:'inc',name:ct});
-    var docRef = await addDoc(incCol,{dt:dt,ds:ds,am:am,rv:rv,ct:ct});
-    lastAddedId = docRef.id;
+    var docRef=await addDoc(incCol,{dt:dt,ds:ds,am:am,rv:rv,ct:ct});
+    lastAddedId=docRef.id;
 
     document.getElementById('indsc').value='';
     document.getElementById('inamt').value='';
-    document.getElementById('icat').value='';
+    pickDD('icat',''); pickDD('inrv','');
     document.getElementById('icn').value='';
     document.getElementById('icn').style.display='none';
     document.getElementById('ind').value=todayStr();
+    ihbSetState(btn,'done');
     toast('Income added successfully ✅','success');
+    setTimeout(function(){ ihbSetState(btn,'idle'); btn.disabled=false; },1800);
   }catch(err){
     console.error('addInc error:',err);
     toast('Save failed: '+err.message,'error');
-  }finally{
-    btn.innerHTML = origHTML;
-    btn.disabled = false;
+    ihbSetState(btn,'idle'); btn.disabled=false;
   }
 }
 window.addExp=addExp;window.addInc=addInc;
@@ -1356,9 +1839,9 @@ rebuildECat();rebuildICat();
   var lpEl=document.getElementById('lp');
   var eyeIcon=document.getElementById('leye-icon');
   var shown=false;
-  var eyeOpen='<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
-  var eyeClosed='<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
-  if(eyeBtn){
+  var eyeOpen='<path d=\"M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/>';
+  var eyeClosed='<path d=\"M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24\"/><line x1=\"1\" y1=\"1\" x2=\"23\" y2=\"23\"/>';
+    if(eyeBtn){
     eyeBtn.addEventListener('click',function(e){
       e.preventDefault();
       shown=!shown;
@@ -1368,7 +1851,342 @@ rebuildECat();rebuildICat();
   }
 })();
 
+// ── GlowingEffect engine ──
+(function(){
+  var PROXIMITY = 64;
+  var INACTIVE_ZONE = 0.01;
+  var targets = [];
+  var rafId = null;
+  var mx = -9999, my = -9999;
+
+  function getGlowEls(){
+    return Array.from(document.querySelectorAll('.sc, .card'));
+  }
+
+  function easeAngle(current, target, factor){
+    var diff = ((target - current + 180) % 360) - 180;
+    return current + diff * factor;
+  }
+
+  var angles = new WeakMap();
+
+  function updateGlow(){
+    var els = getGlowEls();
+    els.forEach(function(el){
+      var rect = el.getBoundingClientRect();
+      var cx = rect.left + rect.width * 0.5;
+      var cy = rect.top + rect.height * 0.5;
+
+      // Inactive zone check
+      var inactiveR = 0.5 * Math.min(rect.width, rect.height) * INACTIVE_ZONE;
+      var dist = Math.hypot(mx - cx, my - cy);
+      if(dist < inactiveR){
+        el.style.setProperty('--glow-active','0');
+        return;
+      }
+
+      // Proximity check
+      var isNear = mx > rect.left - PROXIMITY && mx < rect.right + PROXIMITY &&
+                   my > rect.top - PROXIMITY && my < rect.bottom + PROXIMITY;
+
+      el.style.setProperty('--glow-active', isNear ? '1' : '0');
+      if(!isNear) return;
+
+      // Compute target angle
+      var targetAngle = (Math.atan2(my - cy, mx - cx) * 180 / Math.PI) + 90;
+      var cur = angles.get(el) || 0;
+      var newAngle = easeAngle(cur, targetAngle, 0.12);
+      angles.set(el, newAngle);
+      el.style.setProperty('--glow-angle', newAngle + 'deg');
+    });
+    rafId = requestAnimationFrame(updateGlow);
+  }
+
+  document.addEventListener('pointermove', function(e){
+    mx = e.clientX; my = e.clientY;
+  }, {passive: true});
+
+  // Start loop after login
+  var _origRSE = window.runStaggeredEntrance;
+  window.runStaggeredEntrance = function(){
+    if(_origRSE) _origRSE();
+    if(!rafId) updateGlow();
+  };
+
+  // Also start immediately if already logged in on reload
+  window.addEventListener('load', function(){
+    var lw = document.getElementById('lw');
+    if(lw && (lw.style.display === 'none' || lw.style.cssText.indexOf('none') >= 0)){
+      if(!rafId) updateGlow();
+    }
+  });
+})();
+
+// ═══════════════════════════════════════════════════════
+// ANIMATED DROPDOWN — vanilla JS port of AnimatedDropdown
+// ═══════════════════════════════════════════════════════
+var _openDD = null;
+
+function toggleDD(id){
+  var trigger = document.getElementById(id+'-trigger');
+  var menu    = document.getElementById(id+'-menu');
+  if(!trigger||!menu) return;
+  var isOpen = menu.classList.contains('open');
+  closeAllDD();
+  if(!isOpen){
+    trigger.classList.add('open');
+    menu.classList.add('open');
+    _openDD = id;
+    setTimeout(function(){ var s=document.getElementById(id+'-search'); if(s) s.focus(); },50);
+    // reset animation so items re-enter
+    var items = menu.querySelectorAll('.add-item');
+    items.forEach(function(el){ el.style.animation='none'; void el.offsetHeight; el.style.animation=''; });
+  }
+}
+
+function closeAllDD(){
+  document.querySelectorAll('.add-trigger.open').forEach(function(el){ el.classList.remove('open'); });
+  document.querySelectorAll('.add-menu.open').forEach(function(el){ el.classList.remove('open'); });
+  document.querySelectorAll('.add-search-inp').forEach(function(el){ el.value=''; });
+  document.querySelectorAll('.add-item.hidden').forEach(function(el){ el.classList.remove('hidden'); });
+  _openDD = null;
+}
+
+function pickDD(id, val){
+  var hidden  = document.getElementById(id);
+  var display = document.getElementById(id+'-display');
+  var menu    = document.getElementById(id+'-menu');
+  var trigger = document.getElementById(id+'-trigger');
+  if(hidden)  hidden.value = val;
+  if(display) display.textContent = val ? val : '- Select -';
+  // mark selected
+  if(menu){
+    menu.querySelectorAll('.add-item').forEach(function(btn){
+      btn.classList.toggle('selected', btn.textContent.trim() === val || (val==='NEW_EXP'&&btn.textContent.trim()==='+ Add new...') || (val==='NEW_INC'&&btn.textContent.trim()==='+ Add new...'));
+    });
+  }
+  closeAllDD();
+  // Handle "add new" for categories
+  if(id==='ecat'){
+    var ecn = document.getElementById('ecn');
+    if(ecn) ecn.style.display = val==='NEW_EXP' ? 'block' : 'none';
+  }
+  if(id==='icat'){
+    var icn = document.getElementById('icn');
+    if(icn) icn.style.display = val==='NEW_INC' ? 'block' : 'none';
+  }
+}
+
+// Close dropdowns when clicking outside
+document.addEventListener('mousedown', function(e){
+  if(_openDD && !e.target.closest('.add-wrap')){ closeAllDD(); }
+});
+window.toggleDD=toggleDD; window.pickDD=pickDD; window.closeAllDD=closeAllDD;
+function filterDD(id) {
+  var inp = document.getElementById(id + '-search');
+  if(!inp) return;
+  var q = inp.value.toLowerCase().trim();
+  var list = document.getElementById(id + '-list') || document.getElementById(id + '-menu');
+  if(!list) return;
+  list.querySelectorAll('.add-item').forEach(function(btn) {
+    btn.classList.toggle('hidden', q.length > 0 && btn.textContent.toLowerCase().indexOf(q) === -1);
+  });
+}
+window.filterDD = filterDD;
+
+
+// ═══════════════════════════════════════════════════════
+// DATE WHEEL PICKER — vanilla JS port of DateWheelPicker
+// ═══════════════════════════════════════════════════════
+
+
+
+// ═══════════════════════════════════════════════════
+// BULK IMPORT v4 — CLEAR ALL then import 603 records
+// Ansar Babu (73 exp / 22 inc) | Ubaid (67 / 16)
+// Hassan (203 / 76) | Ayaz (111 / 35)
+// ═══════════════════════════════════════════════════
+(function() {
+  var KEY = 'taj_import_v4_done';
+  if(localStorage.getItem(KEY)) return;
+
+  var EXPENSES = [{"dt":"2025-11-25","ds":"Mixing Machine Maintenance","am":1782.5,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2025-11-25","ds":"Packing Machine Tool","am":25.0,"wh":"Ansar Babu","ct":"Equipment & Tools","dn":false},{"dt":"2025-11-25","ds":"Mixing Machine Maintenance","am":388.7,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2025-11-25","ds":"Emegency Door Channel","am":85.68,"wh":"Ansar Babu","ct":"Other","dn":false},{"dt":"2025-11-25","ds":"Tools","am":25.0,"wh":"Ansar Babu","ct":"Equipment & Tools","dn":false},{"dt":"2025-11-25","ds":"Emegency Door Channel","am":92.0,"wh":"Ansar Babu","ct":"Other","dn":false},{"dt":"2025-11-25","ds":"Air Nipple","am":46.0,"wh":"Ansar Babu","ct":"Equipment & Tools","dn":false},{"dt":"2025-11-25","ds":"Safety Shoe","am":184.0,"wh":"Ansar Babu","ct":"Uniform & Safety","dn":false},{"dt":"2025-11-25","ds":"Plumbing Materials","am":62.0,"wh":"Ansar Babu","ct":"Plumbing","dn":false},{"dt":"2025-11-25","ds":"maintenance","am":591.0,"wh":"Ansar Babu","ct":"Maintenance","dn":false},{"dt":"2025-11-25","ds":"maintenance","am":140.0,"wh":"Ansar Babu","ct":"Maintenance","dn":false},{"dt":"2025-11-25","ds":"Tools","am":8.0,"wh":"Ansar Babu","ct":"Equipment & Tools","dn":false},{"dt":"2025-11-25","ds":"Equipments","am":764.75,"wh":"Ansar Babu","ct":"Equipment & Tools","dn":false},{"dt":"2025-11-25","ds":"8972 Maintenance","am":230.0,"wh":"Ansar Babu","ct":"Van Maintenance","dn":false},{"dt":"2025-11-25","ds":"8972 Maintenance","am":200.0,"wh":"Ansar Babu","ct":"Van Maintenance","dn":false},{"dt":"2025-11-25","ds":"maintenance","am":40.0,"wh":"Ansar Babu","ct":"Maintenance","dn":false},{"dt":"2025-11-25","ds":"maintenance","am":73.0,"wh":"Ansar Babu","ct":"Maintenance","dn":false},{"dt":"2025-11-25","ds":"Safety Shoe","am":30.0,"wh":"Ansar Babu","ct":"Uniform & Safety","dn":false},{"dt":"2025-11-25","ds":"Factory maintenance","am":42.0,"wh":"Ansar Babu","ct":"Factory Maintenance","dn":false},{"dt":"2025-11-25","ds":"Equipments","am":172.5,"wh":"Ansar Babu","ct":"Equipment & Tools","dn":false},{"dt":"2025-11-25","ds":"Machine maintenance","am":150.0,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2025-11-25","ds":"Machine maintenance","am":316.0,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2025-11-25","ds":"Equipments","am":92.0,"wh":"Ansar Babu","ct":"Equipment & Tools","dn":false},{"dt":"2025-11-25","ds":"Ribit Box","am":40.0,"wh":"Ansar Babu","ct":"Equipment & Tools","dn":false},{"dt":"2025-11-25","ds":"maintenance","am":40.0,"wh":"Ansar Babu","ct":"Maintenance","dn":false},{"dt":"2025-11-25","ds":"Fuel common","am":276.0,"wh":"Ansar Babu","ct":"Van Fuel","dn":false},{"dt":"2025-11-25","ds":"Staff food expense","am":151.0,"wh":"Ansar Babu","ct":"Staff Food","dn":false},{"dt":"2025-11-25","ds":"Equipments","am":50.0,"wh":"Ansar Babu","ct":"Equipment & Tools","dn":false},{"dt":"2026-01-02","ds":"Air Nipple","am":150.0,"wh":"Ansar Babu","ct":"Equipment & Tools","dn":false},{"dt":"2026-01-02","ds":"maintenance","am":48.0,"wh":"Ansar Babu","ct":"Maintenance","dn":false},{"dt":"2026-01-02","ds":"Production equipment","am":345.0,"wh":"Ansar Babu","ct":"Equipment & Tools","dn":false},{"dt":"2026-01-02","ds":"Tools - Drill","am":379.0,"wh":"Ansar Babu","ct":"Equipment & Tools","dn":false},{"dt":"2026-01-02","ds":"Machine maintenance - shaft","am":260.0,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2026-01-02","ds":"Machine maintenance - labor charge","am":20.0,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2026-01-02","ds":"Air pipe","am":27.6,"wh":"Ansar Babu","ct":"Equipment & Tools","dn":false},{"dt":"2026-01-02","ds":"Uniform","am":5.0,"wh":"Ansar Babu","ct":"Uniform & Safety","dn":false},{"dt":"2026-01-02","ds":"Machine maintenance","am":412.0,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2026-01-02","ds":"Machine maintenance","am":170.0,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2026-01-02","ds":"Plumbing Materials","am":70.0,"wh":"Ansar Babu","ct":"Plumbing","dn":false},{"dt":"2026-01-02","ds":"Plumbing Materials","am":90.0,"wh":"Ansar Babu","ct":"Plumbing","dn":false},{"dt":"2026-01-02","ds":"Production equipment","am":138.0,"wh":"Ansar Babu","ct":"Equipment & Tools","dn":false},{"dt":"2026-01-02","ds":"Production equipment","am":2432.25,"wh":"Ansar Babu","ct":"Equipment & Tools","dn":false},{"dt":"2026-01-02","ds":"Tools","am":35.0,"wh":"Ansar Babu","ct":"Equipment & Tools","dn":false},{"dt":"2026-01-02","ds":"Shaft Work","am":450.0,"wh":"Ansar Babu","ct":"Equipment & Tools","dn":false},{"dt":"2026-01-02","ds":"Accommodation exp","am":110.0,"wh":"Ansar Babu","ct":"Accommodation","dn":false},{"dt":"2026-01-02","ds":"Food","am":270.0,"wh":"Ansar Babu","ct":"Staff Food","dn":false},{"dt":"2026-01-02","ds":"Vehicle maintenance","am":414.0,"wh":"Ansar Babu","ct":"Van Maintenance","dn":false},{"dt":"2026-01-02","ds":"Uniform","am":189.0,"wh":"Ansar Babu","ct":"Uniform & Safety","dn":false},{"dt":"2026-01-02","ds":"Vehicle maintenance - labor charge","am":350.0,"wh":"Ansar Babu","ct":"Van Maintenance","dn":false},{"dt":"2026-02-13","ds":"Machine maintenance - Oil","am":350.0,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2026-02-13","ds":"Fuel expense","am":185.0,"wh":"Ansar Babu","ct":"Van Fuel","dn":false},{"dt":"2026-02-13","ds":"Printing & stationery","am":13.0,"wh":"Ansar Babu","ct":"Printing & Stationery","dn":false},{"dt":"2026-02-13","ds":"Oil bottle","am":17.0,"wh":"Ansar Babu","ct":"Other","dn":false},{"dt":"2026-02-13","ds":"Machine maintenance","am":11.0,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2026-02-13","ds":"Food expense","am":210.0,"wh":"Ansar Babu","ct":"Staff Food","dn":false},{"dt":"2026-02-13","ds":"Machine maintenance - Belt stiching","am":50.0,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2026-02-13","ds":"Machine maintenance -  Steel bowl","am":70.0,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2026-02-13","ds":"Machine maintenance -  Spring","am":30.0,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2026-02-13","ds":"Machine maintenance -  Grease","am":363.0,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2026-02-13","ds":"Machine maintenance -  Roller Chain","am":624.0,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2026-02-13","ds":"Equipments - Steel table","am":759.0,"wh":"Ansar Babu","ct":"Equipment & Tools","dn":false},{"dt":"2026-02-13","ds":"Machine maintenance -  Roller Chain","am":922.0,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2026-02-13","ds":"Machine maintenance -  Grease","am":380.0,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2026-02-13","ds":"Machine maintenance -  Belt","am":576.0,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2026-03-05","ds":"Staff food expense","am":90.0,"wh":"Ansar Babu","ct":"Staff Food","dn":false},{"dt":"2026-03-05","ds":"Repairs & maintenance - Hose clipp","am":25.0,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2026-03-05","ds":"Repairs & maintenance","am":159.0,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2026-03-05","ds":"Machine maintenance - Greese nipple","am":96.0,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2026-03-05","ds":"Machine maintenance - Industrial work","am":260.0,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2026-03-05","ds":"Machine maintenance - Oil","am":70.0,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2026-03-05","ds":"Machine maintenance - Oil","am":70.0,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2026-03-05","ds":"Machine maintenance - Oil","am":70.0,"wh":"Ansar Babu","ct":"Machine Maintenance","dn":false},{"dt":"2026-03-05","ds":"Ice","am":60.0,"wh":"Ansar Babu","ct":"Ice","dn":false},{"dt":"2025-11-12","ds":"5363 van fuel","am":97.0,"wh":"Ubaid","ct":"Van Fuel","dn":false},{"dt":"2025-11-12","ds":"Ice","am":37.5,"wh":"Ubaid","ct":"Ice","dn":false},{"dt":"2025-11-12","ds":"Yeast & Battery","am":38.0,"wh":"Ubaid","ct":"Ingredients","dn":false},{"dt":"2025-11-12","ds":"5363 van oil change","am":65.0,"wh":"Ubaid","ct":"Other","dn":false},{"dt":"2025-11-12","ds":"Accoomodation Water","am":390.0,"wh":"Ubaid","ct":"Accommodation Water","dn":false},{"dt":"2025-11-12","ds":"Staff food expense","am":233.0,"wh":"Ubaid","ct":"Staff Food","dn":false},{"dt":"2025-11-19","ds":"5363 van fuel","am":95.0,"wh":"Ubaid","ct":"Van Fuel","dn":false},{"dt":"2025-11-19","ds":"5363 van maintenance","am":65.0,"wh":"Ubaid","ct":"Van Maintenance","dn":false},{"dt":"2025-11-19","ds":"Staff food expense","am":200.0,"wh":"Ubaid","ct":"Staff Food","dn":false},{"dt":"2025-11-19","ds":"Staff food expense","am":5.0,"wh":"Ubaid","ct":"Staff Food","dn":false},{"dt":"2025-11-19","ds":"Flour","am":35.0,"wh":"Ubaid","ct":"Ingredients","dn":false},{"dt":"2025-11-19","ds":"Accoomodation expense","am":45.0,"wh":"Ubaid","ct":"Accommodation","dn":false},{"dt":"2025-11-19","ds":"Ice","am":30.0,"wh":"Ubaid","ct":"Ice","dn":false},{"dt":"2025-11-19","ds":"Accommodation water","am":390.0,"wh":"Ubaid","ct":"Accommodation Water","dn":false},{"dt":"2025-11-28","ds":"Plumbing materials","am":13.0,"wh":"Ubaid","ct":"Plumbing","dn":false},{"dt":"2025-11-28","ds":"Ice","am":37.0,"wh":"Ubaid","ct":"Ice","dn":false},{"dt":"2025-11-28","ds":"Battery","am":4.0,"wh":"Ubaid","ct":"Other","dn":false},{"dt":"2025-11-28","ds":"5363 van fuel","am":96.0,"wh":"Ubaid","ct":"Van Fuel","dn":false},{"dt":"2025-11-28","ds":"Factory Maintenance","am":15.0,"wh":"Ubaid","ct":"Factory Maintenance","dn":false},{"dt":"2025-11-28","ds":"5363 van maintenance","am":65.0,"wh":"Ubaid","ct":"Van Maintenance","dn":false},{"dt":"2025-11-28","ds":"Flour","am":90.0,"wh":"Ubaid","ct":"Ingredients","dn":false},{"dt":"2025-11-28","ds":"Accommodation water","am":520.0,"wh":"Ubaid","ct":"Accommodation Water","dn":false},{"dt":"2025-11-28","ds":"Staff food expense","am":250.0,"wh":"Ubaid","ct":"Staff Food","dn":false},{"dt":"2025-11-28","ds":"Ice","am":80.0,"wh":"Ubaid","ct":"Ice","dn":false},{"dt":"2025-12-09","ds":"5363 van maintenance","am":65.0,"wh":"Ubaid","ct":"Van Maintenance","dn":false},{"dt":"2025-12-09","ds":"5363 van fuel","am":188.0,"wh":"Ubaid","ct":"Van Fuel","dn":false},{"dt":"2025-12-09","ds":"Ingredients","am":45.0,"wh":"Ubaid","ct":"Ingredients","dn":false},{"dt":"2025-12-09","ds":"Flour","am":90.0,"wh":"Ubaid","ct":"Ingredients","dn":false},{"dt":"2025-12-09","ds":"Ingredients","am":26.0,"wh":"Ubaid","ct":"Ingredients","dn":false},{"dt":"2025-12-09","ds":"Staff food expense","am":300.0,"wh":"Ubaid","ct":"Staff Food","dn":false},{"dt":"2025-12-09","ds":"Accommodation water","am":390.0,"wh":"Ubaid","ct":"Accommodation Water","dn":false},{"dt":"2025-12-18","ds":"Accommodation water","am":520.0,"wh":"Ubaid","ct":"Accommodation Water","dn":false},{"dt":"2025-12-18","ds":"Staff food expense","am":350.0,"wh":"Ubaid","ct":"Staff Food","dn":false},{"dt":"2025-12-18","ds":"5363 van fuel","am":100.0,"wh":"Ubaid","ct":"Van Fuel","dn":false},{"dt":"2025-12-18","ds":"5363 van maintenance","am":65.0,"wh":"Ubaid","ct":"Van Maintenance","dn":false},{"dt":"2025-12-28","ds":"Accommodation water","am":390.0,"wh":"Ubaid","ct":"Accommodation Water","dn":false},{"dt":"2025-12-28","ds":"5363 van fuel","am":187.0,"wh":"Ubaid","ct":"Van Fuel","dn":false},{"dt":"2025-12-28","ds":"5363 van maintenance","am":65.0,"wh":"Ubaid","ct":"Van Maintenance","dn":false},{"dt":"2025-12-28","ds":"Ingredients","am":16.0,"wh":"Ubaid","ct":"Ingredients","dn":false},{"dt":"2025-12-28","ds":"Staff food expense","am":350.0,"wh":"Ubaid","ct":"Staff Food","dn":false},{"dt":"2026-01-16","ds":"Electrical expense","am":95.0,"wh":"Ubaid","ct":"Electrical","dn":false},{"dt":"2026-01-16","ds":"Simsim","am":20.0,"wh":"Ubaid","ct":"Ingredients","dn":false},{"dt":"2026-01-25","ds":"Electrical expense","am":20.0,"wh":"Ubaid","ct":"Electrical","dn":false},{"dt":"2026-01-25","ds":"5363 van maintenance","am":265.0,"wh":"Ubaid","ct":"Van Maintenance","dn":false},{"dt":"2026-01-25","ds":"Battery","am":4.0,"wh":"Ubaid","ct":"Other","dn":false},{"dt":"2026-01-25","ds":"5363 van fuel","am":196.0,"wh":"Ubaid","ct":"Van Fuel","dn":false},{"dt":"2026-01-25","ds":"Ingredients","am":43.0,"wh":"Ubaid","ct":"Ingredients","dn":false},{"dt":"2026-01-25","ds":"5363 van maintenance","am":65.0,"wh":"Ubaid","ct":"Van Maintenance","dn":false},{"dt":"2026-02-05","ds":"Accommodation water","am":390.0,"wh":"Ubaid","ct":"Accommodation Water","dn":false},{"dt":"2026-02-05","ds":"Staff food expense","am":74.0,"wh":"Ubaid","ct":"Staff Food","dn":false},{"dt":"2026-02-05","ds":"Staff food expense","am":350.0,"wh":"Ubaid","ct":"Staff Food","dn":false},{"dt":"2026-02-05","ds":"Ingredients","am":22.0,"wh":"Ubaid","ct":"Ingredients","dn":false},{"dt":"2026-02-05","ds":"5363 van fuel","am":105.0,"wh":"Ubaid","ct":"Van Fuel","dn":false},{"dt":"2026-02-05","ds":"Water motor","am":130.0,"wh":"Ubaid","ct":"Water Motor","dn":false},{"dt":"2026-02-05","ds":"5363 van maintenance","am":65.0,"wh":"Ubaid","ct":"Van Maintenance","dn":false},{"dt":"2026-02-10","ds":"Electrical expense","am":126.0,"wh":"Ubaid","ct":"Electrical","dn":false},{"dt":"2026-02-10","ds":"Ingredients","am":12.0,"wh":"Ubaid","ct":"Ingredients","dn":false},{"dt":"2026-02-10","ds":"5363 van fuel","am":105.0,"wh":"Ubaid","ct":"Van Fuel","dn":false},{"dt":"2026-02-10","ds":"Accommodation water","am":390.0,"wh":"Ubaid","ct":"Accommodation Water","dn":false},{"dt":"2026-02-17","ds":"5363 van maintenance","am":70.0,"wh":"Ubaid","ct":"Van Maintenance","dn":false},{"dt":"2026-02-17","ds":"Staff food expense","am":400.0,"wh":"Ubaid","ct":"Staff Food","dn":false},{"dt":"2026-02-17","ds":"Accommodation water","am":390.0,"wh":"Ubaid","ct":"Accommodation Water","dn":false},{"dt":"2026-03-10","ds":"Accommodation water","am":917.0,"wh":"Ubaid","ct":"Accommodation Water","dn":false},{"dt":"2026-03-10","ds":"Electrical expense","am":45.0,"wh":"Ubaid","ct":"Electrical","dn":false},{"dt":"2026-03-10","ds":"Fuel - common","am":50.0,"wh":"Ubaid","ct":"Van Fuel","dn":false},{"dt":"2026-03-10","ds":"Staff food expense","am":335.0,"wh":"Ubaid","ct":"Staff Food","dn":false},{"dt":"2026-03-10","ds":"Ingredients","am":59.0,"wh":"Ubaid","ct":"Ingredients","dn":false},{"dt":"2025-11-10","ds":"RDT","am":1058.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-11-10","ds":"4074 van maintenance","am":265.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2025-11-11","ds":"Staff Food - Fish","am":533.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-11-11","ds":"Al Amal Trd Co - Staff Food","am":1532.5,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-11-11","ds":"Cleaning exp - First Center","am":770.0,"wh":"Hassan","ct":"Cleaning","dn":false},{"dt":"2025-11-11","ds":"Al Amal Trd - Flour","am":124.2,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-11-11","ds":"Global Food Co - Bread improver","am":287.5,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-11-17","ds":"RDT - Yeast","am":943.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-11-17","ds":"RDT - Samooli Kees","am":287.75,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-11-18","ds":"First center - cleaning","am":584.69,"wh":"Hassan","ct":"Cleaning","dn":false},{"dt":"2025-11-18","ds":"Al Amal  Trd - Mess","am":217.34,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-11-18","ds":"Staff Food - Fish","am":538.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-11-22","ds":"RDT - Butter","am":218.5,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-11-22","ds":"Bread improver","am":49.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-11-22","ds":"4074 van maintenance","am":1290.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2025-11-22","ds":"4074 van maintenance","am":480.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2025-11-22","ds":"Scrapper","am":46.0,"wh":"Hassan","ct":"Other","dn":false},{"dt":"2025-11-22","ds":"4074 van fuel","am":148.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-11-25","ds":"4074 van fuel","am":60.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-11-25","ds":"L1 Fuel","am":75.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-11-25","ds":"Staff Food - Fish","am":514.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-11-25","ds":"Staff Food","am":44.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-11-25","ds":"Staff Food","am":26.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-11-27","ds":"L1 Fuel","am":145.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-11-27","ds":"First center - Safety & Mess","am":1504.2,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2025-11-27","ds":"RDT - Yeast","am":943.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-11-27","ds":"Staff food expense","am":694.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-11-30","ds":"4074 van maintenance","am":1400.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2025-11-30","ds":"L1 Fuel","am":155.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-03","ds":"L1 Fuel","am":90.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-03","ds":"Staff food expense","am":15.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-03","ds":"Staff food expense - container","am":198.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-08","ds":"L1 Fuel","am":280.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-08","ds":"Staff food expense","am":615.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-08","ds":"RDT - Yeast","am":707.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-12-08","ds":"First center - Safety","am":1043.0,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2025-12-10","ds":"RDT - Yeast","am":1179.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-12-10","ds":"RDT - butter","am":218.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-12-12","ds":"L1 Fuel","am":80.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-12","ds":"Staff food expense - cooker","am":295.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-12","ds":"Staff food expense","am":400.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-12","ds":"Key","am":15.0,"wh":"Hassan","ct":"Other","dn":false},{"dt":"2025-12-12","ds":"Staff food expense","am":25.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-13","ds":"L1 Fuel","am":86.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-13","ds":"Staff food expense","am":462.56,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-13","ds":"Bread improver","am":287.5,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-12-13","ds":"Printer Toner","am":360.0,"wh":"Hassan","ct":"Other","dn":false},{"dt":"2025-12-14","ds":"Khayaliyah","am":363.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-12-17","ds":"L1 Fuel","am":151.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-18","ds":"L1 Fuel","am":80.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-18","ds":"Staff food expense","am":600.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-18","ds":"Staff food expense","am":25.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-20","ds":"L1 Fuel","am":149.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-20","ds":"RDT - Yeast","am":1178.75,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-12-20","ds":"RDT - butter","am":218.5,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-12-20","ds":"Bakemate Bread Improver","am":385.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-12-20","ds":"First center","am":1250.53,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2025-12-20","ds":"First center","am":21.0,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2025-12-22","ds":"L1 Fuel","am":80.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-22","ds":"4074 van maintenance","am":250.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2025-12-22","ds":"L1 Fuel","am":100.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-25","ds":"L1 Fuel","am":80.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-25","ds":"Staff food expense","am":500.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-25","ds":"Staff food expense","am":30.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-25","ds":"Staff food expense","am":360.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-26","ds":"L1 Fuel","am":98.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-26","ds":"Staff food expense","am":110.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-26","ds":"Rukn Al Najah","am":14.0,"wh":"Hassan","ct":"Other","dn":false},{"dt":"2025-12-27","ds":"RDT - Yeast","am":1178.75,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-12-27","ds":"Bread improver","am":385.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-12-27","ds":"L1 Fuel","am":100.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-28","ds":"L1 Fuel","am":65.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-28","ds":"First center","am":180.55,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2025-12-29","ds":"L1 Fuel","am":80.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-31","ds":"L1 Fuel","am":81.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-31","ds":"Staff food exp","am":560.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-31","ds":"RDT - butter","am":218.5,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-01","ds":"L1 Fuel","am":90.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-02","ds":"L1 Fuel","am":70.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-03","ds":"L1 Fuel","am":75.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-03","ds":"First center","am":1312.71,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-01-04","ds":"staff food exp","am":1037.17,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-01-04","ds":"staff food exp","am":40.25,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-01-04","ds":"L1 Fuel","am":90.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-06","ds":"L1 Fuel","am":137.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-06","ds":"Staff food exp","am":560.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-01-06","ds":"RDT - Yeast","am":1178.75,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-06","ds":"RDT - Yeast","am":218.5,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-07","ds":"L1 Fuel","am":72.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-08","ds":"L1 Fuel","am":70.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-09","ds":"L1 Fuel","am":65.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-10","ds":"Bread improver","am":385.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-10","ds":"Staff food exp","am":172.78,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-01-10","ds":"First center","am":720.76,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-01-10","ds":"L1 Fuel","am":70.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-11","ds":"L1 Fuel","am":65.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-11","ds":"RDT - butter","am":218.5,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-12","ds":"L1 Fuel","am":65.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-12","ds":"4074 van maintenance","am":30.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-01-13","ds":"First center","am":630.0,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-01-13","ds":"Staff food expense","am":610.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-01-13","ds":"L1 Fuel","am":65.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-15","ds":"L1 Fuel","am":65.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-15","ds":"Staff food expense","am":11.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-01-15","ds":"RDT - Yeast","am":1179.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-17","ds":"Al Amal Trd","am":911.29,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-17","ds":"First center","am":519.36,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-01-20","ds":"First center","am":207.2,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-01-20","ds":"Bread improver","am":385.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-20","ds":"RDT - butter","am":218.5,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-21","ds":"Staff food expense","am":670.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-01-22","ds":"L1 Fuel","am":90.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-23","ds":"L1 Fuel","am":81.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-24","ds":"4074 van maintenance","am":35.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-01-24","ds":"L1 Fuel","am":100.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-24","ds":"Khayaliyah","am":471.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-24","ds":"RDT - butter","am":218.5,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-25","ds":"L1 Fuel","am":88.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-25","ds":"Staff food exp","am":928.53,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-01-25","ds":"First center","am":535.58,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-01-26","ds":"4074 van maintenance","am":255.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-01-26","ds":"L1 Fuel","am":95.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-28","ds":"RDT - Victoria","am":1178.75,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-28","ds":"RDT - Butter","am":218.5,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-29","ds":"Staff food expense","am":665.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-02","ds":"Staff food expense","am":671.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-02","ds":"First center","am":780.0,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-02-03","ds":"RDT - butter","am":437.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-02-04","ds":"4074 van maintenance","am":240.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-02-04","ds":"L1 Fuel","am":225.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-05","ds":"L1 Fuel","am":111.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-05","ds":"Staff food expense","am":625.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-07","ds":"RDT - Victoria","am":455.4,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-02-07","ds":"Khayaliyah","am":765.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-02-07","ds":"L1 Fuel","am":216.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-08","ds":"L1 Fuel","am":120.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-08","ds":"Staff food expense","am":1072.79,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-08","ds":"First center","am":1296.0,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-02-08","ds":"Staff food expense - mixi repair","am":65.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-09","ds":"L1 Fuel","am":115.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-10","ds":"L1 Fuel","am":120.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-11","ds":"L1 Fuel","am":114.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-12","ds":"L1 Fuel","am":105.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-12","ds":"Al Amal - Butter","am":224.25,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-02-12","ds":"First center","am":156.0,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-02-12","ds":"4074 van maintenance","am":65.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-02-13","ds":"L1 Fuel","am":101.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-14","ds":"Staff food expense","am":635.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-14","ds":"4074 van maintenance","am":810.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-02-14","ds":"L1 Fuel","am":105.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-14","ds":"First center","am":941.28,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-02-15","ds":"L1 Fuel","am":175.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-15","ds":"RDT - Butter","am":391.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-02-16","ds":"Khayaliyah - simsim","am":258.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-02-17","ds":"Khayaliah - Simsim","am":828.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-02-17","ds":"L1 Fuel","am":85.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-18","ds":"L1 Fuel","am":105.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-18","ds":"Staff food expense","am":32.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-18","ds":"Staff food expense","am":207.23,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-18","ds":"Staff food expense","am":1441.72,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-18","ds":"Cleaning expense","am":70.0,"wh":"Hassan","ct":"Cleaning","dn":false},{"dt":"2026-02-19","ds":"Arabian Nuts - Milk Powder","am":524.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-02-19","ds":"Staff food expense","am":775.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-19","ds":"Blender","am":380.0,"wh":"Hassan","ct":"Other","dn":false},{"dt":"2026-02-20","ds":"First center - Glass","am":40.0,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-02-20","ds":"L1 Fuel","am":294.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-21","ds":"First Center","am":460.0,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-02-22","ds":"4074 van maintenance","am":500.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-02-22","ds":"L1 Fuel","am":110.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-22","ds":"First center","am":536.0,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-02-22","ds":"Milk powder","am":765.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-02-22","ds":"4074 van maintenance","am":300.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-02-22","ds":"4074 van maintenance","am":15.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-02-23","ds":"L1 Fuel","am":100.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-23","ds":"First center","am":61.0,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-02-23","ds":"RDT - Butter","am":586.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-02-23","ds":"4074 van maintenance","am":15.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-02-25","ds":"L1 Fuel","am":185.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-25","ds":"4074 van maintenance","am":30.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-02-25","ds":"staff food expense","am":167.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-25","ds":"staff food expense","am":23.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-25","ds":"L1 Fuel","am":95.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-25","ds":"staff food expense","am":720.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-28","ds":"4074 van maintenance","am":200.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-02-28","ds":"L1 Fuel","am":175.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-03-04","ds":"L1 Fuel","am":300.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-03-04","ds":"Staff food expense","am":740.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-03-05","ds":"First center","am":1092.0,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-03-06","ds":"L1 Fuel","am":147.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-03-06","ds":"Milk powder","am":510.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-03-06","ds":"First center","am":105.16,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-03-07","ds":"L1 Fuel","am":75.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-03-07","ds":"4074 van maintenance","am":250.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-03-08","ds":"L1 Fuel","am":94.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-03-08","ds":"Milk powder","am":510.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-03-09","ds":"Staff food expense","am":720.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-03-09","ds":"L1 Fuel","am":165.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-03-11","ds":"First Center","am":811.9,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-03-11","ds":"Staff food expense","am":81.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-03-12","ds":"L1 Fuel","am":80.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-03-12","ds":"staff food expense","am":1337.15,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-03-12","ds":"Oil","am":990.15,"wh":"Hassan","ct":"Other","dn":false},{"dt":"2026-03-12","ds":"First center","am":525.55,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2025-11-11","ds":"Drinking water","am":21.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2025-11-11","ds":"Passanger van fuel","am":202.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2025-11-11","ds":"Passanger van maintenance","am":515.0,"wh":"Ayaz","ct":"Van Maintenance","dn":false},{"dt":"2025-11-17","ds":"Ice","am":75.0,"wh":"Ayaz","ct":"Ice","dn":false},{"dt":"2025-11-17","ds":"Van Fuel","am":357.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2025-11-17","ds":"Drinking water","am":53.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2025-11-21","ds":"Passanger van maintenance","am":253.0,"wh":"Ayaz","ct":"Van Maintenance","dn":false},{"dt":"2025-11-21","ds":"Passanger van fuel","am":258.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2025-11-21","ds":"Drinking water","am":37.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2025-11-26","ds":"Gas Syllinder","am":125.0,"wh":"Ayaz","ct":"Gas","dn":false},{"dt":"2025-11-26","ds":"Passanger van fuel","am":180.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2025-11-26","ds":"Drinking water","am":34.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2025-11-29","ds":"Passanger van fuel","am":225.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2025-11-29","ds":"Drinking water","am":30.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2025-11-29","ds":"Ice","am":80.0,"wh":"Ayaz","ct":"Ice","dn":false},{"dt":"2025-12-06","ds":"Drinking water","am":69.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2025-12-06","ds":"Passanger van fuel","am":395.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2025-12-09","ds":"Passanger van maintenance","am":253.0,"wh":"Ayaz","ct":"Van Maintenance","dn":false},{"dt":"2025-12-09","ds":"Drinking water","am":55.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2025-12-09","ds":"Passanger van fuel","am":175.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2025-12-13","ds":"Passanger van fuel","am":306.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2025-12-13","ds":"Passanger van maintenance","am":40.0,"wh":"Ayaz","ct":"Van Maintenance","dn":false},{"dt":"2025-12-13","ds":"Drinking water","am":36.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2025-12-18","ds":"Passanger van fuel","am":243.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2025-12-18","ds":"Cleaning materials","am":3.0,"wh":"Ayaz","ct":"Cleaning","dn":false},{"dt":"2025-12-18","ds":"Drinking water","am":31.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2025-12-18","ds":"staff food exp","am":125.0,"wh":"Ayaz","ct":"Staff Food","dn":false},{"dt":"2025-12-23","ds":"Passanger van fuel","am":337.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2025-12-23","ds":"Battery","am":5.0,"wh":"Ayaz","ct":"Other","dn":false},{"dt":"2025-12-23","ds":"Passanger van maintenance","am":5.0,"wh":"Ayaz","ct":"Van Maintenance","dn":false},{"dt":"2025-12-23","ds":"Drinking water","am":57.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2025-12-27","ds":"Passanger van maintenance","am":253.0,"wh":"Ayaz","ct":"Van Maintenance","dn":false},{"dt":"2025-12-27","ds":"Passanger van fuel","am":158.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2025-12-27","ds":"Drinking water","am":33.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2025-12-30","ds":"Passanger van fuel","am":185.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2025-12-30","ds":"Passanger van maintenance","am":10.0,"wh":"Ayaz","ct":"Van Maintenance","dn":false},{"dt":"2025-12-30","ds":"Drinking water","am":37.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2025-12-30","ds":"Accommodation exp","am":230.0,"wh":"Ayaz","ct":"Accommodation","dn":false},{"dt":"2025-12-30","ds":"Accommodation exp","am":110.0,"wh":"Ayaz","ct":"Accommodation","dn":false},{"dt":"2025-12-31","ds":"Drinking water","am":13.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2025-12-31","ds":"Passanger van fuel","am":100.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2026-01-06","ds":"Passanger van fuel","am":307.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2026-01-06","ds":"Passanger van maintenance","am":60.0,"wh":"Ayaz","ct":"Van Maintenance","dn":false},{"dt":"2026-01-06","ds":"Drinking water","am":40.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2026-01-07","ds":"Passanger van maintenance","am":155.0,"wh":"Ayaz","ct":"Van Maintenance","dn":false},{"dt":"2026-01-07","ds":"Meezan battery","am":15.0,"wh":"Ayaz","ct":"Other","dn":false},{"dt":"2026-01-07","ds":"Passanger van maintenance","am":15.0,"wh":"Ayaz","ct":"Van Maintenance","dn":false},{"dt":"2026-01-07","ds":"Drinking water","am":22.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2026-01-07","ds":"Passanger van fuel","am":60.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2026-01-12","ds":"Passanger van fuel","am":265.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2026-01-12","ds":"Passanger van maintenance","am":13.0,"wh":"Ayaz","ct":"Van Maintenance","dn":false},{"dt":"2026-01-12","ds":"Drinking water","am":49.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2026-01-12","ds":"Passanger van maintenance","am":253.0,"wh":"Ayaz","ct":"Van Maintenance","dn":false},{"dt":"2026-01-12","ds":"Passanger van fuel","am":75.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2026-01-16","ds":"Passanger van fuel","am":160.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2026-01-16","ds":"Drinking water","am":30.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2026-01-16","ds":"Accommodation exp","am":50.0,"wh":"Ayaz","ct":"Accommodation","dn":false},{"dt":"2026-01-21","ds":"Passanger van fuel","am":346.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2026-01-21","ds":"Drinking water","am":52.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2026-01-27","ds":"Passanger van fuel","am":368.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2026-01-27","ds":"Ice","am":30.0,"wh":"Ayaz","ct":"Ice","dn":false},{"dt":"2026-01-27","ds":"Drinking water","am":63.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2026-01-29","ds":"Passanger van maintenance","am":253.0,"wh":"Ayaz","ct":"Van Maintenance","dn":false},{"dt":"2026-01-29","ds":"Passanger van fuel","am":75.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2026-01-29","ds":"Drinking water","am":15.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2026-01-31","ds":"Passanger van maintenance","am":606.0,"wh":"Ayaz","ct":"Van Maintenance","dn":false},{"dt":"2026-01-31","ds":"Passanger van fuel","am":87.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2026-01-31","ds":"Drinking water","am":22.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2026-01-31","ds":"Accommodation exp","am":80.0,"wh":"Ayaz","ct":"Accommodation","dn":false},{"dt":"2026-02-03","ds":"Staff van fuel","am":171.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2026-02-03","ds":"Drinking water","am":18.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2026-02-07","ds":"Staff van fuel","am":297.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2026-02-07","ds":"Drinking water","am":31.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2026-02-07","ds":"Accommodation exp","am":120.0,"wh":"Ayaz","ct":"Accommodation","dn":false},{"dt":"2026-02-07","ds":"Staff van maintenance","am":25.0,"wh":"Ayaz","ct":"Van Maintenance","dn":false},{"dt":"2026-02-11","ds":"Staff van fuel","am":288.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2026-02-11","ds":"Staff van maintenance","am":40.0,"wh":"Ayaz","ct":"Van Maintenance","dn":false},{"dt":"2026-02-11","ds":"Staff van maintenance","am":20.0,"wh":"Ayaz","ct":"Van Maintenance","dn":false},{"dt":"2026-02-11","ds":"Drinking water","am":117.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2026-02-14","ds":"Staff van maintenance","am":253.0,"wh":"Ayaz","ct":"Van Maintenance","dn":false},{"dt":"2026-02-14","ds":"Staff van fuel","am":251.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2026-02-14","ds":"Drinking water","am":9.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2026-02-20","ds":"Staff van fuel","am":378.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2026-02-20","ds":"Drinking water","am":9.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2026-02-20","ds":"Accommodation exp","am":110.0,"wh":"Ayaz","ct":"Accommodation","dn":false},{"dt":"2026-02-20","ds":"staff food exp","am":11.0,"wh":"Ayaz","ct":"Staff Food","dn":false},{"dt":"2026-02-20","ds":"Ice","am":69.0,"wh":"Ayaz","ct":"Ice","dn":false},{"dt":"2026-02-20","ds":"Staff van maintenance","am":10.0,"wh":"Ayaz","ct":"Van Maintenance","dn":false},{"dt":"2026-02-21","ds":"staff food exp","am":157.0,"wh":"Ayaz","ct":"Staff Food","dn":false},{"dt":"2026-02-21","ds":"Staff van fuel","am":85.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2026-02-21","ds":"Staff van maintenance","am":40.0,"wh":"Ayaz","ct":"Van Maintenance","dn":false},{"dt":"2026-02-21","ds":"staff food exp","am":4.0,"wh":"Ayaz","ct":"Staff Food","dn":false},{"dt":"2026-02-24","ds":"Staff van fuel","am":147.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2026-02-24","ds":"Staff van maintenance","am":552.0,"wh":"Ayaz","ct":"Van Maintenance","dn":false},{"dt":"2026-02-24","ds":"Drinking water","am":10.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2026-02-27","ds":"Staff van fuel","am":195.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2026-02-27","ds":"Ice","am":62.0,"wh":"Ayaz","ct":"Ice","dn":false},{"dt":"2026-02-27","ds":"Drinking water","am":11.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2026-03-02","ds":"Al Naqaa Ice","am":100.0,"wh":"Ayaz","ct":"Ice","dn":false},{"dt":"2026-03-02","ds":"Staff van fuel","am":205.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2026-03-02","ds":"Drinking water","am":5.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2026-03-03","ds":"Staff van maintenance","am":253.0,"wh":"Ayaz","ct":"Van Maintenance","dn":false},{"dt":"2026-03-03","ds":"Accommodation exp","am":70.0,"wh":"Ayaz","ct":"Accommodation","dn":false},{"dt":"2026-03-03","ds":"Drinking water","am":5.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2026-03-03","ds":"Staff van fuel","am":75.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2026-03-09","ds":"Staff van fuel","am":369.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2026-03-09","ds":"ice","am":37.0,"wh":"Ayaz","ct":"Ice","dn":false},{"dt":"2026-03-09","ds":"Drinking water","am":18.0,"wh":"Ayaz","ct":"Drinking Water","dn":false},{"dt":"2026-03-12","ds":"Staff van fuel","am":175.0,"wh":"Ayaz","ct":"Van Fuel","dn":false},{"dt":"2026-03-12","ds":"staff food exp","am":159.0,"wh":"Ayaz","ct":"Staff Food","dn":false},{"dt":"2026-03-12","ds":"Drinking water","am":4.0,"wh":"Ayaz","ct":"Drinking Water","dn":false}];
+  var INCOMES  = [{"dt":"2025-11-06","ds":"","am":500.0,"rv":"Ansar Babu","ct":"Cash received"},{"dt":"2025-11-10","ds":"","am":1000.0,"rv":"Ansar Babu","ct":"Cash received"},{"dt":"2025-11-15","ds":"","am":1500.0,"rv":"Ansar Babu","ct":"Cash received"},{"dt":"2025-11-15","ds":"","am":1500.0,"rv":"Ansar Babu","ct":"Cash received"},{"dt":"2025-11-20","ds":"","am":1500.0,"rv":"Ansar Babu","ct":"Cash received"},{"dt":"2025-11-25","ds":"","am":97.0,"rv":"Ansar Babu","ct":"Cash received"},{"dt":"2025-11-26","ds":"","am":500.0,"rv":"Ansar Babu","ct":"Cash received"},{"dt":"2025-11-26","ds":"","am":0.13,"rv":"Ansar Babu","ct":"Cash received"},{"dt":"2025-12-13","ds":"","am":2500.0,"rv":"Ansar Babu","ct":"Cash received"},{"dt":"2025-12-15","ds":"","am":400.0,"rv":"Ansar Babu","ct":"Cash received"},{"dt":"2025-12-17","ds":"","am":500.0,"rv":"Ansar Babu","ct":"Cash received"},{"dt":"2025-12-21","ds":"","am":1000.0,"rv":"Ansar Babu","ct":"Cash received"},{"dt":"2025-12-28","ds":"","am":1000.0,"rv":"Ansar Babu","ct":"Cash received"},{"dt":"2026-01-02","ds":"","am":1000.0,"rv":"Ansar Babu","ct":"Cash received"},{"dt":"2026-01-10","ds":"","am":964.85,"rv":"Ansar Babu","ct":"Cash received"},{"dt":"2026-01-20","ds":"","am":500.0,"rv":"Ansar Babu","ct":"Cash received"},{"dt":"2026-02-04","ds":"","am":500.0,"rv":"Ansar Babu","ct":"Cash received"},{"dt":"2026-02-07","ds":"","am":1500.0,"rv":"Ansar Babu","ct":"Cash received"},{"dt":"2026-02-10","ds":"","am":1500.0,"rv":"Ansar Babu","ct":"Cash received"},{"dt":"2026-02-13","ds":"","am":60.0,"rv":"Ansar Babu","ct":"Cash received"},{"dt":"2026-03-05","ds":"","am":400.0,"rv":"Ansar Babu","ct":"Cash received"},{"dt":"2026-03-11","ds":"","am":500.0,"rv":"Ansar Babu","ct":"Cash received"},{"dt":"2025-11-03","ds":"","am":500.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2025-11-12","ds":"","am":860.5,"rv":"Ubaid","ct":"Cash received"},{"dt":"2025-11-20","ds":"","am":865.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2025-11-28","ds":"","am":1170.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2025-12-06","ds":"","am":200.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2025-12-09","ds":"","am":904.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2025-12-18","ds":"","am":1035.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2025-12-28","ds":"","am":508.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2026-01-16","ds":"","am":615.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2026-01-25","ds":"","am":593.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2026-01-28","ds":"","am":500.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2026-02-05","ds":"","am":636.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2026-02-09","ds":"","am":200.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2026-02-10","ds":"","am":533.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2026-02-11","ds":"","am":1500.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2026-03-11","ds":"","am":666.0,"rv":"Ubaid","ct":"Cash received"},{"dt":"2025-11-05","ds":"","am":73.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-11-09","ds":"","am":1610.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-11-11","ds":"","am":3000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-11-17","ds":"","am":1700.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-11-18","ds":"","am":700.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-11-19","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-11-19","ds":"","am":2000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-11-22","ds":"","am":300.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-11-27","ds":"","am":2300.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-11-28","ds":"","am":694.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-11-30","ds":"","am":1300.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-01","ds":"","am":255.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-04","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-04","ds":"","am":0.68,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-08","ds":"","am":700.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-08","ds":"","am":3500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-13","ds":"","am":1500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-15","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-17","ds":"","am":600.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-20","ds":"","am":3000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-22","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-24","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-26","ds":"","am":355.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-27","ds":"","am":1500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-27","ds":"","am":300.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-29","ds":"","am":220.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-31","ds":"","am":600.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-03","ds":"","am":1500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-04","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-05","ds":"","am":800.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-06","ds":"","am":1400.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-08","ds":"","am":600.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-10","ds":"","am":1310.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-13","ds":"","am":1200.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-15","ds":"","am":2000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-17","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-20","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-21","ds":"","am":800.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-24","ds":"","am":2000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-25","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-28","ds":"","am":1305.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-28","ds":"","am":33.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-29","ds":"","am":700.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-02","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-02","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-03","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-05","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-06","ds":"","am":98.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-07","ds":"","am":2541.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-07","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-07","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-08","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-10","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-12","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-14","ds":"","am":508.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-14","ds":"","am":1500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-15","ds":"","am":700.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-16","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-17","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-18","ds":"","am":2000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-19","ds":"","am":700.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-21","ds":"","am":1526.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-22","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-22","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-23","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-25","ds":"","am":1052.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-27","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-03-01","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-03-05","ds":"","am":1200.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-03-06","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-03-06","ds":"","am":589.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-03-08","ds":"","am":1025.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-03-09","ds":"","am":555.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-03-11","ds":"","am":1500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-03-12","ds":"","am":1800.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-03-13","ds":"","am":1200.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-11-09","ds":"","am":500.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2025-11-11","ds":"","am":500.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2025-11-12","ds":"","am":238.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2025-11-17","ds":"","am":485.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2025-11-21","ds":"","am":548.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2025-11-26","ds":"","am":339.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2025-11-29","ds":"","am":335.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2025-12-06","ds":"","am":464.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2025-12-09","ds":"","am":483.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2025-12-13","ds":"","am":382.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2025-12-18","ds":"","am":402.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2025-12-23","ds":"","am":404.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2025-12-27","ds":"","am":444.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2025-12-28","ds":"","am":300.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2025-12-31","ds":"","am":385.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2026-01-06","ds":"","am":407.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2026-01-07","ds":"","am":267.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2026-01-12","ds":"","am":527.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2026-01-16","ds":"","am":368.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2026-01-21","ds":"","am":398.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2026-01-27","ds":"","am":461.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2026-01-29","ds":"","am":1043.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2026-02-03","ds":"","am":300.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2026-02-07","ds":"","am":457.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2026-02-11","ds":"","am":465.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2026-02-14","ds":"","am":513.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2026-02-20","ds":"","am":587.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2026-02-21","ds":"","am":286.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2026-02-21","ds":"","am":600.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2026-02-27","ds":"","am":377.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2026-03-02","ds":"","am":310.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2026-03-03","ds":"","am":303.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2026-03-05","ds":"","am":500.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2026-03-09","ds":"","am":24.0,"rv":"Ayaz","ct":"Cash received"},{"dt":"2026-03-12","ds":"","am":338.0,"rv":"Ayaz","ct":"Cash received"}];
+
+  function waitReady(cb) {
+    if(typeof db!=='undefined' && typeof addDoc!=='undefined' && typeof catCol!=='undefined') cb();
+    else setTimeout(function(){ waitReady(cb); }, 400);
+  }
+
+  waitReady(async function() {
+    try {
+      if(typeof toast==='function') toast('🗑️ Clearing existing data…', 'info');
+
+      // ── DELETE ALL existing expenses ──
+      var expSnap = await getDocs(expCol);
+      var delExp = [];
+      expSnap.forEach(function(d){ delExp.push(deleteDoc(doc(db,'expenses',d.id))); });
+      await Promise.all(delExp);
+
+      // ── DELETE ALL existing incomes ──
+      var incSnap = await getDocs(incCol);
+      var delInc = [];
+      incSnap.forEach(function(d){ delInc.push(deleteDoc(doc(db,'incomes',d.id))); });
+      await Promise.all(delInc);
+
+      // ── DELETE ALL existing categories ──
+      var catSnap = await getDocs(catCol);
+      var delCat = [];
+      catSnap.forEach(function(d){ delCat.push(deleteDoc(doc(db,'categories',d.id))); });
+      await Promise.all(delCat);
+
+      if(typeof toast==='function') toast('⏳ Importing 603 records…', 'info');
+
+      // ── ADD fresh categories ──
+      var cats = new Set(EXPENSES.map(function(e){ return e.ct; }));
+      cats.add('Cash received');
+      for(var c of cats) {
+        var t = c === 'Cash received' ? 'inc' : 'exp';
+        await addDoc(catCol, {type:t, name:c});
+      }
+
+      // ── IMPORT expenses ──
+      for(var e of EXPENSES) {
+        await addDoc(expCol, {dt:e.dt, ds:e.ds, am:e.am, wh:e.wh, ct:e.ct, dn:false});
+      }
+
+      // ── IMPORT incomes ──
+      for(var i of INCOMES) {
+        await addDoc(incCol, {dt:i.dt, ds:i.ds, am:i.am, rv:i.rv, ct:i.ct});
+      }
+
+      localStorage.setItem(KEY, '1');
+      if(typeof toast==='function') toast('✅ Done! 603 records imported cleanly.', 'success');
+      console.log('✅ TAJ import v4 complete — 603 records');
+    } catch(err) {
+      console.error('Import error:', err);
+      if(typeof toast==='function') toast('❌ Error: ' + err.message, 'error');
+    }
+  });
+})();
+
+// ═══════════════════════════════════════════════
+// HASSAN REPLACE — delete Hassan entries, re-import
+// 203 expenses + 76 incomes
+// ═══════════════════════════════════════════════
+(function() {
+  var KEY = 'taj_hassan_v1_done';
+  if(localStorage.getItem(KEY)) return;
+
+  var EXPENSES = [{"dt":"2025-11-10","ds":"RDT","am":1058.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-11-10","ds":"4074 van maintenance","am":265.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2025-11-11","ds":"Staff Food - Fish","am":533.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-11-11","ds":"Al Amal Trd Co - Staff Food","am":1532.5,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-11-11","ds":"Cleaning exp - First Center","am":770.0,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2025-11-11","ds":"Al Amal Trd - Flour","am":124.2,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-11-11","ds":"Global Food Co - Bread improver","am":287.5,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-11-17","ds":"RDT - Yeast","am":943.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-11-17","ds":"RDT - Samooli Kees","am":287.75,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-11-18","ds":"First center - cleaning","am":584.69,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2025-11-18","ds":"Al Amal  Trd - Mess","am":217.34,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-11-18","ds":"Staff Food - Fish","am":538.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-11-22","ds":"RDT - Butter","am":218.5,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-11-22","ds":"Bread improver","am":49.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-11-22","ds":"4074 van maintenance","am":1290.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2025-11-22","ds":"4074 van maintenance","am":480.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2025-11-22","ds":"Scrapper","am":46.0,"wh":"Hassan","ct":"Other","dn":false},{"dt":"2025-11-22","ds":"4074 van fuel","am":148.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-11-25","ds":"4074 van fuel","am":60.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-11-25","ds":"L1 Fuel","am":75.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-11-25","ds":"Staff Food - Fish","am":514.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-11-25","ds":"Staff Food","am":44.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-11-25","ds":"Staff Food","am":26.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-11-27","ds":"L1 Fuel","am":145.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-11-27","ds":"First center - Safety & Mess","am":1504.2,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2025-11-27","ds":"RDT - Yeast","am":943.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-11-27","ds":"Staff food expense","am":694.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-11-30","ds":"4074 van maintenance","am":1400.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2025-11-30","ds":"L1 Fuel","am":155.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-03","ds":"L1 Fuel","am":90.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-03","ds":"Staff food expense","am":15.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-03","ds":"Staff food expense - container","am":198.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-08","ds":"L1 Fuel","am":280.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-08","ds":"Staff food expense","am":615.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-08","ds":"RDT - Yeast","am":707.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-12-08","ds":"First center - Safety","am":1043.0,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2025-12-10","ds":"RDT - Yeast","am":1179.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-12-10","ds":"RDT - butter","am":218.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-12-12","ds":"L1 Fuel","am":80.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-12","ds":"Staff food expense - cooker","am":295.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-12","ds":"Staff food expense","am":400.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-12","ds":"Key","am":15.0,"wh":"Hassan","ct":"Other","dn":false},{"dt":"2025-12-12","ds":"Staff food expense","am":25.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-13","ds":"L1 Fuel","am":86.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-13","ds":"Staff food expense","am":462.56,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-13","ds":"Bread improver","am":287.5,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-12-13","ds":"Printer Toner","am":360.0,"wh":"Hassan","ct":"Printing & Stationery","dn":false},{"dt":"2025-12-14","ds":"Khayaliyah","am":363.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-12-17","ds":"L1 Fuel","am":151.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-18","ds":"L1 Fuel","am":80.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-18","ds":"Staff food expense","am":600.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-18","ds":"Staff food expense","am":25.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-20","ds":"L1 Fuel","am":149.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-20","ds":"RDT - Yeast","am":1178.75,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-12-20","ds":"RDT - butter","am":218.5,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-12-20","ds":"Bakemate Bread Improver","am":385.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-12-20","ds":"First center","am":1250.53,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2025-12-20","ds":"First center","am":21.0,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2025-12-22","ds":"L1 Fuel","am":80.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-22","ds":"4074 van maintenance","am":250.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2025-12-22","ds":"L1 Fuel","am":100.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-25","ds":"L1 Fuel","am":80.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-25","ds":"Staff food expense","am":500.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-25","ds":"Staff food expense","am":30.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-25","ds":"Staff food expense","am":360.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-26","ds":"L1 Fuel","am":98.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-26","ds":"Staff food expense","am":110.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-26","ds":"Rukn Al Najah","am":14.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-12-27","ds":"RDT - Yeast","am":1178.75,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-12-27","ds":"Bread improver","am":385.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2025-12-27","ds":"L1 Fuel","am":100.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-28","ds":"L1 Fuel","am":65.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-28","ds":"First center","am":180.55,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2025-12-29","ds":"L1 Fuel","am":80.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-31","ds":"L1 Fuel","am":81.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2025-12-31","ds":"Staff food exp","am":560.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2025-12-31","ds":"RDT - butter","am":218.5,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-01","ds":"L1 Fuel","am":90.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-02","ds":"L1 Fuel","am":70.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-03","ds":"L1 Fuel","am":75.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-03","ds":"First center","am":1312.71,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-01-04","ds":"staff food exp","am":1037.17,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-01-04","ds":"staff food exp","am":40.25,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-01-04","ds":"L1 Fuel","am":90.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-06","ds":"L1 Fuel","am":137.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-06","ds":"Staff food exp","am":560.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-01-06","ds":"RDT - Yeast","am":1178.75,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-06","ds":"RDT - Yeast","am":218.5,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-07","ds":"L1 Fuel","am":72.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-08","ds":"L1 Fuel","am":70.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-09","ds":"L1 Fuel","am":65.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-10","ds":"Bread improver","am":385.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-10","ds":"Staff food exp","am":172.78,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-01-10","ds":"First center","am":720.76,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-01-10","ds":"L1 Fuel","am":70.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-11","ds":"L1 Fuel","am":65.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-11","ds":"RDT - butter","am":218.5,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-12","ds":"L1 Fuel","am":65.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-12","ds":"4074 van maintenance","am":30.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-01-13","ds":"First center","am":630.0,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-01-13","ds":"Staff food expense","am":610.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-01-13","ds":"L1 Fuel","am":65.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-15","ds":"L1 Fuel","am":65.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-15","ds":"Staff food expense","am":11.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-01-15","ds":"RDT - Yeast","am":1179.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-17","ds":"Al Amal Trd","am":911.29,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-17","ds":"First center","am":519.36,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-01-20","ds":"First center","am":207.2,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-01-20","ds":"Bread improver","am":385.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-20","ds":"RDT - butter","am":218.5,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-21","ds":"Staff food expense","am":670.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-01-22","ds":"L1 Fuel","am":90.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-23","ds":"L1 Fuel","am":81.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-24","ds":"4074 van maintenance","am":35.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-01-24","ds":"L1 Fuel","am":100.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-24","ds":"Khayaliyah","am":471.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-24","ds":"RDT - butter","am":218.5,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-25","ds":"L1 Fuel","am":88.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-25","ds":"Staff food exp","am":928.53,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-01-25","ds":"First center","am":535.58,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-01-26","ds":"4074 van maintenance","am":255.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-01-26","ds":"L1 Fuel","am":95.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-01-28","ds":"RDT - Victoria","am":1178.75,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-28","ds":"RDT - Butter","am":218.5,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-01-29","ds":"Staff food expense","am":665.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-02","ds":"Staff food expense","am":671.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-02","ds":"First center","am":780.0,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-02-03","ds":"RDT - butter","am":437.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-02-04","ds":"4074 van maintenance","am":240.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-02-04","ds":"L1 Fuel","am":225.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-05","ds":"L1 Fuel","am":111.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-05","ds":"Staff food expense","am":625.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-07","ds":"RDT - Victoria","am":455.4,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-02-07","ds":"Khayaliyah","am":765.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-02-07","ds":"L1 Fuel","am":216.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-08","ds":"L1 Fuel","am":120.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-08","ds":"Staff food expense","am":1072.79,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-08","ds":"First center","am":1296.0,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-02-08","ds":"Staff food expense - mixi repair","am":65.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-09","ds":"L1 Fuel","am":115.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-10","ds":"L1 Fuel","am":120.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-11","ds":"L1 Fuel","am":114.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-12","ds":"L1 Fuel","am":105.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-12","ds":"Al Amal - Butter","am":224.25,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-02-12","ds":"First center","am":156.0,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-02-12","ds":"4074 van maintenance","am":65.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-02-13","ds":"L1 Fuel","am":101.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-14","ds":"Staff food expense","am":635.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-14","ds":"4074 van maintenance","am":810.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-02-14","ds":"L1 Fuel","am":105.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-14","ds":"First center","am":941.28,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-02-15","ds":"L1 Fuel","am":175.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-15","ds":"RDT - Butter","am":391.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-02-16","ds":"Khayaliyah - simsim","am":258.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-02-17","ds":"Khayaliah - Simsim","am":828.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-02-17","ds":"L1 Fuel","am":85.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-18","ds":"L1 Fuel","am":105.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-18","ds":"Staff food expense","am":32.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-18","ds":"Staff food expense","am":207.23,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-18","ds":"Staff food expense","am":1441.72,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-18","ds":"Cleaning expense","am":70.0,"wh":"Hassan","ct":"Cleaning","dn":false},{"dt":"2026-02-19","ds":"Arabian Nuts - Milk Powder","am":524.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-02-19","ds":"Staff food expense","am":775.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-19","ds":"Blender","am":380.0,"wh":"Hassan","ct":"Other","dn":false},{"dt":"2026-02-20","ds":"First center - Glass","am":40.0,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-02-20","ds":"L1 Fuel","am":294.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-21","ds":"First Center","am":460.0,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-02-22","ds":"4074 van maintenance","am":500.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-02-22","ds":"L1 Fuel","am":110.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-22","ds":"First center","am":536.0,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-02-22","ds":"Milk powder","am":765.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-02-22","ds":"4074 van maintenance","am":300.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-02-22","ds":"4074 van maintenance","am":15.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-02-23","ds":"L1 Fuel","am":100.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-23","ds":"First center","am":61.0,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-02-23","ds":"RDT - Butter","am":586.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-02-23","ds":"4074 van maintenance","am":15.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-02-25","ds":"L1 Fuel","am":185.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-25","ds":"4074 van maintenance","am":30.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-02-25","ds":"staff food expense","am":167.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-25","ds":"staff food expense","am":23.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-25","ds":"L1 Fuel","am":95.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-02-25","ds":"staff food expense","am":720.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-02-28","ds":"4074 van maintenance","am":200.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-02-28","ds":"L1 Fuel","am":175.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-03-04","ds":"L1 Fuel","am":300.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-03-04","ds":"Staff food expense","am":740.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-03-05","ds":"First center","am":1092.0,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-03-06","ds":"L1 Fuel","am":147.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-03-06","ds":"Milk powder","am":510.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-03-06","ds":"First center","am":105.16,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-03-07","ds":"L1 Fuel","am":75.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-03-07","ds":"4074 van maintenance","am":250.0,"wh":"Hassan","ct":"Van Maintenance","dn":false},{"dt":"2026-03-08","ds":"L1 Fuel","am":94.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-03-08","ds":"Milk powder","am":510.0,"wh":"Hassan","ct":"Ingredients","dn":false},{"dt":"2026-03-09","ds":"Staff food expense","am":720.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-03-09","ds":"L1 Fuel","am":165.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-03-11","ds":"First Center","am":811.9,"wh":"Hassan","ct":"First Center","dn":false},{"dt":"2026-03-11","ds":"Staff food expense","am":81.0,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-03-12","ds":"L1 Fuel","am":80.0,"wh":"Hassan","ct":"Van Fuel","dn":false},{"dt":"2026-03-12","ds":"staff food expense","am":1337.15,"wh":"Hassan","ct":"Staff Food","dn":false},{"dt":"2026-03-12","ds":"Oil","am":990.15,"wh":"Hassan","ct":"Machine Maintenance - Oil","dn":false},{"dt":"2026-03-12","ds":"First center","am":525.55,"wh":"Hassan","ct":"First Center","dn":false}];
+  var INCOMES  = [{"dt":"2025-11-05","ds":"","am":73.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-11-09","ds":"","am":1610.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-11-11","ds":"","am":3000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-11-17","ds":"","am":1700.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-11-18","ds":"","am":700.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-11-19","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-11-19","ds":"","am":2000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-11-22","ds":"","am":300.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-11-27","ds":"","am":2300.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-11-28","ds":"","am":694.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-11-30","ds":"","am":1300.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-01","ds":"","am":255.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-04","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-04","ds":"","am":0.68,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-08","ds":"","am":700.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-08","ds":"","am":3500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-13","ds":"","am":1500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-15","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-17","ds":"","am":600.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-20","ds":"","am":3000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-22","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-24","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-26","ds":"","am":355.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-27","ds":"","am":1500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-27","ds":"","am":300.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-29","ds":"","am":220.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2025-12-31","ds":"","am":600.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-03","ds":"","am":1500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-04","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-05","ds":"","am":800.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-06","ds":"","am":1400.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-08","ds":"","am":600.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-10","ds":"","am":1310.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-13","ds":"","am":1200.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-15","ds":"","am":2000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-17","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-20","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-21","ds":"","am":800.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-24","ds":"","am":2000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-25","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-28","ds":"","am":1305.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-28","ds":"","am":33.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-01-29","ds":"","am":700.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-02","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-02","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-03","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-05","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-06","ds":"","am":98.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-07","ds":"","am":2541.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-07","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-07","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-08","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-10","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-12","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-14","ds":"","am":508.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-14","ds":"","am":1500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-15","ds":"","am":700.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-16","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-17","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-18","ds":"","am":2000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-19","ds":"","am":700.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-21","ds":"","am":1526.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-22","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-22","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-23","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-25","ds":"","am":1052.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-02-27","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-03-01","ds":"","am":1000.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-03-05","ds":"","am":1200.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-03-06","ds":"","am":500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-03-06","ds":"","am":589.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-03-08","ds":"","am":1025.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-03-09","ds":"","am":555.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-03-11","ds":"","am":1500.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-03-12","ds":"","am":1800.0,"rv":"Hassan","ct":"Cash received"},{"dt":"2026-03-13","ds":"","am":1200.0,"rv":"Hassan","ct":"Cash received"}];
+
+  function waitReady(cb) {
+    if(typeof db!=='undefined' && typeof addDoc!=='undefined' && typeof expCol!=='undefined') cb();
+    else setTimeout(function(){ waitReady(cb); }, 400);
+  }
+
+  waitReady(async function() {
+    try {
+      if(typeof toast==='function') toast('🗑️ Removing Hassan entries…', 'info');
+
+      // Delete Hassan expenses
+      var expSnap = await getDocs(expCol);
+      var dels = [];
+      expSnap.forEach(function(d){
+        if(d.data().wh === 'Hassan') dels.push(deleteDoc(doc(db,'expenses',d.id)));
+      });
+      await Promise.all(dels);
+
+      // Delete Hassan incomes
+      var incSnap = await getDocs(incCol);
+      var dels2 = [];
+      incSnap.forEach(function(d){
+        if(d.data().rv === 'Hassan') dels2.push(deleteDoc(doc(db,'incomes',d.id)));
+      });
+      await Promise.all(dels2);
+
+      if(typeof toast==='function') toast('⏳ Importing Hassan data…', 'info');
+
+      // Add any new categories
+      var catSnap = await getDocs(catCol);
+      var existCats = new Set();
+      catSnap.forEach(function(d){ existCats.add(d.data().name); });
+      var newCats = new Set(EXPENSES.map(function(e){ return e.ct; }));
+      for(var c of newCats) {
+        if(!existCats.has(c)) await addDoc(catCol, {type:'exp', name:c});
+      }
+
+      // Import Hassan expenses
+      for(var e of EXPENSES) {
+        await addDoc(expCol, {dt:e.dt, ds:e.ds, am:e.am, wh:e.wh, ct:e.ct, dn:false});
+      }
+      // Import Hassan incomes
+      for(var i of INCOMES) {
+        await addDoc(incCol, {dt:i.dt, ds:i.ds, am:i.am, rv:i.rv, ct:i.ct});
+      }
+
+      localStorage.setItem(KEY, '1');
+      if(typeof toast==='function') toast('✅ Hassan: 203 expenses + 76 incomes loaded!', 'success');
+      console.log('✅ Hassan import done');
+    } catch(err) {
+      console.error(err);
+      if(typeof toast==='function') toast('❌ Error: ' + err.message, 'error');
+    }
+  });
+})();
+
+function filterTxnTable(q) {
+  var s = (q || '').toLowerCase().trim();
+  var tb = document.getElementById('tb');
+  if (!tb) return;
+  var rows = tb.querySelectorAll('tr');
+  var visible = 0;
+  rows.forEach(function(tr) {
+    if (tr.cells.length < 3) { tr.style.display = ''; return; }
+    // col 0 = date, col 1 = description + category, col 2 = amount, col 3 = person, col 4 = type
+    var desc  = (tr.cells[1] ? tr.cells[1].textContent : '').toLowerCase();
+    var person = (tr.cells[3] ? tr.cells[3].textContent : '').toLowerCase();
+    var type   = (tr.cells[4] ? tr.cells[4].textContent : '').toLowerCase();
+    var date   = (tr.cells[0] ? tr.cells[0].textContent : '').toLowerCase();
+    var amount = (tr.cells[2] ? tr.cells[2].textContent : '').toLowerCase();
+    var match = !s ||
+      desc.indexOf(s) > -1 ||
+      person.indexOf(s) > -1 ||
+      type.indexOf(s) > -1 ||
+      date.indexOf(s) > -1 ||
+      amount.indexOf(s) > -1;
+    tr.style.display = match ? '' : 'none';
+    if (match) visible++;
+  });
+  // Update count badge
+  var cbn = document.getElementById('cbn');
+  if (cbn && s) cbn.textContent = visible;
+}
+window.filterTxnTable = filterTxnTable;
+
+// Clear txn search when table re-renders
+var _origDTable = dTable;
+dTable = function() {
+  _origDTable.apply(this, arguments);
+  var inp = document.getElementById('txn-search');
+  if (inp && inp.value) {
+    setTimeout(function(){ filterTxnTable(document.getElementById('txn-search').value); }, 0);
+  }
+};
+
 </script>
+<!-- Liquid Glass SVG Filter -->
+<svg class="hidden" style="position:absolute;width:0;height:0;overflow:hidden;">
+  <defs>
+    <filter id="liquid-glass" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05 0.05" numOctaves="1" seed="1" result="turbulence"/>
+      <feGaussianBlur in="turbulence" stdDeviation="2" result="blurredNoise"/>
+      <feDisplacementMap in="SourceGraphic" in2="blurredNoise" scale="40" xChannelSelector="R" yChannelSelector="B" result="displaced"/>
+      <feGaussianBlur in="displaced" stdDeviation="2.5" result="finalBlur"/>
+      <feComposite in="finalBlur" in2="finalBlur" operator="over"/>
+    </filter>
+  </defs>
+</svg>
 </body>
 </html>
-
